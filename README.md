@@ -8,5 +8,7 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 
 # Que faire en ce moment ?
 
-M- API ATP 
-C- def 
+- Traitement des données (classement des joueurs avec leurs ATP...)
+- Création du tirage selon les règles de Rolland Garros
+- Simulation pour avoir la distribtion de probas et le force selon les tirages
+- Calcul du luck index pour un tirage donné. (fictif ou réel)
