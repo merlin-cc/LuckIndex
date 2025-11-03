@@ -4,3 +4,9 @@ Maths et sports : Construire un site internet "luck index" : pour divers tirages
 Voir section 5.1.2 "luck index" dans ce papier : https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5413142
 et voir aussi https://driven-by-data.net/2014/06/06/luckydraw
 Construire la distribution de proba de la force de l'adversaire n'est pas toujours facile, ça dépend de la procédure de tirage au sort.
+
+
+# Que faire en ce moment ?
+
+M- API ATP 
+C- def 
