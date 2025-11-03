@@ -10,5 +10,6 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 
 - Traitement des données (classement des joueurs avec leurs ATP...)
 - Création du tirage selon les règles de Rolland Garros
-- Simulation pour avoir la distribtion de probas et le force selon les tirages
+- Simulation pour avoir la distribtion de probas et la force selon les tirages
 - Calcul du luck index pour un tirage donné. (fictif ou réel)
+- Pour compléter le tirage (24 autres joueurs), on cree un joueur "qualilfié" dont la force est la moyenne de la force des joueurs rank 105 à 208 
