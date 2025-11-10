@@ -30,13 +30,16 @@ All other players (the 96 unseeded players, qualifiers, and wild cards) are draw
 """
 
 
-def createDraws():
+def createDraws(list_players):
     """
     create 32 groups of 4 players with one top32 player in each groups
     """
     draw = {}
-    
-    other_players = list(range(32, 128))
+    try :
+        len(list_players) == 128
+    except ValueError:
+        print("Not enough player to create 32 pull")
+    other_players = list_players[32:]
     rd.shuffle(other_players)
     
     for i in range(32):
