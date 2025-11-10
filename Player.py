@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 class TennisPlayer():
     def __init__(self, name : str, country : str, rank : int , elo : int ):
@@ -10,15 +11,18 @@ class TennisPlayer():
 data = pd.read_csv('tennisATPRanking.csv')
 
 
-def list_players(data, max_rank):
+def players_list(data, min_rank, max_rank):
+    assert min_rank>0, "the minimal rank must be >= 1"
     res = []
-    for rank in range(1, max_rank + 1):
+    for rank in range(min_rank, max_rank + 1):
         res.append(TennisPlayer(data.loc[rank-1]['Name'], data.loc[rank-1]['Country'], data.loc[rank-1]['Rank'], data.loc[rank-1]['Points']))
 
     return res
 
-L = list_players(data, 104)
+best_104_players = players_list(data,1, 104)
 
-#vérif
-show = [p.name for p in L]
-print(show)
+
+players_105_to_200 = players_list(data,105, 200)
+elos_105_to_200 = [player.elo for player in players_105_to_200]
+
+qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) #we consider that the player is french and his rank is 105
