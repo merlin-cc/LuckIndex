@@ -108,13 +108,15 @@ def run_simulation(list_players, num_simulations=10000):
         
         draw = createDraws(list_players.copy())
         
-        opponents_map = get_first_round_opponents_from_draw(draw)
+        opponents_map = get_opponents_from_draw(draw)
 
         for player_name, opponent in opponents_map.items():
             opponent_strength_dist[player_name].append(opponent.elo)
 
     print("Simulation complete.")
     return opponent_strength_dist
+
+# Calcul de la loi de probabilité en utilisant le TLC
 
 
 # Calcul du luck index
