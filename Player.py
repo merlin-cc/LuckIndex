@@ -7,9 +7,6 @@ class TennisPlayer():
         self.country = country
         self.rank = rank
         self.elo = elo
-    
-data = pd.read_csv('tennisATPRanking.csv')
-
 
 def players_list(data, min_rank, max_rank):
     assert min_rank>0, "the minimal rank must be >= 1"
@@ -19,13 +16,14 @@ def players_list(data, min_rank, max_rank):
 
     return res
 
-best_104_players = players_list(data,1, 104)
 
+def total_players_list(data):
+    best_104_players = players_list(data,1, 104)
 
-players_105_to_200 = players_list(data,105, 200)
-elos_105_to_200 = [player.elo for player in players_105_to_200]
+    players_105_to_200 = players_list(data,105, 200)
+    elos_105_to_200 = [player.elo for player in players_105_to_200]
+    #we consider that the player is french and his rank is 105 
+    #qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) 
+    total_players = best_104_players + [TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200))]*24
 
-#we consider that the player is french and his rank is 105 
-qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) 
-
-total_players = best_104_players + [TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200))]*24
+    return total_players

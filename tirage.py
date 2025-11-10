@@ -50,5 +50,3 @@ def createDraws(list_players):
         draw[i] = [player_2, player_3, player_4]
 
     return draw
-
-print(createDraws())
