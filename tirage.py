@@ -58,6 +58,13 @@ def createDraws(list_players):
 
 # Construction of the density of probability using the LLN
 
+def calculate_win_probability(elo1, elo2):
+    """
+    Calcule la probabilité que le joueur 1 gagne contre le joueur 2
+    en se basant sur la formule ELO.
+    """
+    return 1 / (1 + 10**((elo2 - elo1) / 400))
+
 
 def get_first_round_opponents_from_draw(draw):
     """From a bracket (ordered list of 128 players), create a map of player -> opponent."""
@@ -71,25 +78,41 @@ def get_first_round_opponents_from_draw(draw):
 
 
 def run_simulation(list_players, num_simulations=10000):
-    """
-    Runs N simulations of the draw to compute the distribution of first-round
-    opponent strength for each player.
-    Returns a dictionary mapping player names to a list of their opponents' ELOs.
-    """
     print(f"Running {num_simulations} simulations...")
-    # defaultdict simplifies appending to lists for new keys
     opponent_strength_dist = defaultdict(list)
 
-    for _ in range(num_simulations):
-        # 1. Create a valid random bracket
-        draw = createDraws(list_players)
+    for i in range(num_simulations):
+        if i % 1000 == 0 and i > 0:
+            print(f"Completed {i} simulations...")
         
-        # 2. Get the first-round pairings
+        draw = createDraws(list_players.copy())
+        
         opponents_map = get_first_round_opponents_from_draw(draw)
 
-        # 3. Record the strength (elo) of the opponent for each player
         for player_name, opponent in opponents_map.items():
             opponent_strength_dist[player_name].append(opponent.elo)
 
     print("Simulation complete.")
     return opponent_strength_dist
+
+
+# Calcul du luck index
+
+def luck_index(list_players):
+    distributions = run_simulation(list_players, 10000)
+    luck_index = {}
+    for player_name, elo_list in distributions.items():
+        average_opponent_elo = sum(elo_list) / len(elo_list)
+        luck_index[player_name] = average_opponent_elo
+
+    # trie des joueurs
+    sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
+    print("\n--- Top 5 des joueurs les plus 'chanceux' (adversaire le plus faible) ---")
+    for player, avg_elo in sorted_by_luck[:5]:
+        print(f"{player}: {avg_elo:.2f} ELO moyen")
+
+    print("\n--- Top 5 des joueurs les plus 'malchanceux' (adversaire le plus fort) ---")
+    for player, avg_elo in sorted_by_luck[-5:]:
+        print(f"{player}: {avg_elo:.2f} ELO moyen")
+    
+    return sorted_by_luck
