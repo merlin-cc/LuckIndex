@@ -1,5 +1,7 @@
 import random as rd
 from collections import defaultdict
+
+from Player import TennisPlayer
 """
 Here we create random draws that are allowed by Roland Garros rules
 A quick remind of how it works : 
@@ -58,22 +60,41 @@ def createDraws(list_players):
 
 # Construction of the density of probability using the LLN
 
-def calculate_win_probability(elo1, elo2):
+def win_probability(elo1, elo2):
     """
     Calcule la probabilité que le joueur 1 gagne contre le joueur 2
     en se basant sur la formule ELO.
     """
-    return 1 / (1 + 10**((elo2 - elo1) / 400))
+    return 1 / (1 + 10**((elo2 - elo1) / 400)) #calcul proposé par le systeme elo
 
 
-def get_first_round_opponents_from_draw(draw):
+def get_opponents_from_draw(draw):
     """From a bracket (ordered list of 128 players), create a map of player -> opponent."""
     opponents_map = {}
-    for i in range(0, 128, 2):
+    for i in range(0, 128, 4):
         p1 = draw[i]
         p2 = draw[i+1]
-        opponents_map[p1.name] = p2
-        opponents_map[p2.name] = p1
+        p3 = draw[i+2]
+        p4 = draw[i+3]
+        #chaque joueur affronte son adversaire direct 
+        opponents_map[p1] = p2
+        opponents_map[p1] = p2
+        opponents_map[p3] = p4
+        opponents_map[p4] = p3
+
+        #calcul des adversaires potentiels au 2e round
+        opp_1_elo = p1.elo*win_probability(p1.elo, p2.elo) + p2.elo*win_probability(p2.elo, p1.elo)
+        opp_bracket_1 = TennisPlayer(p1.name + p2.name, p1.country + p2.country, 
+                                     max(p1.rank, p2.rank), opp_1_elo)
+        opp_2_elo = p3.elo*win_probability(p3.elo, p4.elo) + p4.elo*win_probability(p4.elo, p3.elo)
+        opp_bracket_2 = TennisPlayer(p3.name + p4.name, p3.country + p4.country, 
+                                     max(p3.rank, p4.rank), opp_2_elo)
+        #ajout des joueurs potentiels au 2e round
+        opponents_map[p1] = opp_bracket_1
+        opponents_map[p1] = opp_bracket_1
+        opponents_map[p3] = opp_bracket_2
+        opponents_map[p4] = opp_bracket_2
+
     return opponents_map
 
 
