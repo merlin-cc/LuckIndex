@@ -1,6 +1,7 @@
 import random as rd
 from collections import defaultdict
-
+from scipy.stats import norm
+from scipy.integrate import quad
 from Player import TennisPlayer
 """
 Here we create random draws that are allowed by Roland Garros rules
@@ -97,7 +98,7 @@ def get_opponents_from_draw(draw):
 
     return opponents_map
 
-
+# Calcul de la loi de probabilité en utilisant le TLC
 def run_simulation(list_players, num_simulations=10000):
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
@@ -110,23 +111,30 @@ def run_simulation(list_players, num_simulations=10000):
         
         opponents_map = get_opponents_from_draw(draw)
 
-        for player_name, opponent in opponents_map.items():
-            opponent_strength_dist[player_name].append(opponent.elo)
+        for player, opponent in opponents_map.items():
+            opponent_strength_dist[player].append(opponent.elo)
 
+    distributions = {}
+    for player in opponent_strength_dist:
+        distributions[player] = norm.fit(opponent_strength_dist[player])
+    
     print("Simulation complete.")
-    return opponent_strength_dist
-
-# Calcul de la loi de probabilité en utilisant le TLC
+    return distributions
 
 
 # Calcul du luck index
 
-def luck_index(list_players):
-    distributions = run_simulation(list_players, 10000)
+def luck_index(list_players, distributions, draw):
     luck_index = {}
-    for player_name, elo_list in distributions.items():
-        average_opponent_elo = sum(elo_list) / len(elo_list)
-        luck_index[player_name] = average_opponent_elo
+    opponents_map = get_opponents_from_draw(draw)
+    for player in list_players:
+        average_opponent_elo = 0
+        for opponent in opponents_map[player]:
+            average_opponent_elo += opponent.elo/2
+
+        mu, sigma = distributions[player]
+
+        luck_index[player] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
 
     # trie des joueurs
     sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])

@@ -5,4 +5,4 @@ data = pd.read_csv('tennisATPRanking.csv')
 
 list_players = total_players_list(data)
 
-draw = createDraws(list_players)
+run_simulation(list_players, 100)
