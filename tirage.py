@@ -104,7 +104,7 @@ def run_simulation(list_players, num_simulations=10000):
     opponent_strength_dist = defaultdict(list)
 
     for i in range(num_simulations):
-        if i % 1000 == 0 and i > 0:
+        if i % 100 == 0 and i > 0:
             print(f"Completed {i} simulations...")
         
         draw = createDraws(list_players.copy())
@@ -116,7 +116,7 @@ def run_simulation(list_players, num_simulations=10000):
 
     distributions = {}
     for player in opponent_strength_dist:
-        distributions[player] = norm.fit(opponent_strength_dist[player])
+        distributions[player] = norm.fit(opponent_strength_dist[player]) #mu and sigma of normal distibution
     
     print("Simulation complete.")
     return distributions
