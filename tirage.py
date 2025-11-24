@@ -72,11 +72,11 @@ def win_probability(elo1, elo2):
 def get_opponents_from_draw(draw):
     """From a bracket (ordered list of 128 players), create a map of player -> opponent."""
     opponents_map = {}
-    for i in range(0, 128, 4):
-        p1 = draw[i]
-        p2 = draw[i+1]
-        p3 = draw[i+2]
-        p4 = draw[i+3]
+    for seed in draw:
+        p1 = seed
+        p2 = draw[seed][0]
+        p3 = draw[seed][1]
+        p4 = draw[seed][2]
         #chaque joueur affronte son adversaire direct 
         opponents_map[p1] = p2
         opponents_map[p1] = p2
