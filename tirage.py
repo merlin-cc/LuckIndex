@@ -3,6 +3,9 @@ from collections import defaultdict
 from scipy.stats import norm
 from scipy.integrate import quad
 from Player import TennisPlayer
+import matplotlib.pyplot as plt
+import numpy as np
+
 """
 Here we create random draws that are allowed by Roland Garros rules
 A quick remind of how it works : 
@@ -148,3 +151,25 @@ def luck_index(list_players, distributions, draw):
         print(f"{player.name}: {luck:.2f} luck index")
     
     return luck_index
+
+
+def display_luck_index(distributions, luckIndex, player):
+    mu, sigma = distributions[player]
+    X = np.linspace(-500 ,5000, 10000)
+
+    plt.plot(X, norm.pdf(X,mu, sigma))
+    plt.axvline(x=(1-luckIndex[player]) * 2000, ymin=0, ymax=1, color = 'red')
+
+    plt.title("Probability distribution and Luck index for " + player.name)
+
+def display_random(distributions, luckIndex, list_players, N):
+    players = list_players
+    rd.shuffle(players)
+    fig, axes = plt.subplots(N, N, figsize=(15, 15))
+    fig.suptitle(f'{N*N} tirages aléatoires de joueurs', fontsize=16)
+    
+    for i, ax in enumerate(axes.flat):
+        if i < len(players) and i < N*N:
+            player = players[i]
+            plt.axes(axes.flat[i])
+            display_luck_index(distributions, luckIndex, player)
