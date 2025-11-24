@@ -78,10 +78,10 @@ def get_opponents_from_draw(draw):
         p3 = draw[seed][1]
         p4 = draw[seed][2]
         #chaque joueur affronte son adversaire direct 
-        opponents_map[p1] = p2
-        opponents_map[p1] = p2
-        opponents_map[p3] = p4
-        opponents_map[p4] = p3
+        opponents_map[p1] = [p2]
+        opponents_map[p2] = [p1]
+        opponents_map[p3] = [p4]
+        opponents_map[p4] = [p3]
 
         #calcul des adversaires potentiels au 2e round
         opp_1_elo = p1.elo*win_probability(p1.elo, p2.elo) + p2.elo*win_probability(p2.elo, p1.elo)
@@ -91,10 +91,10 @@ def get_opponents_from_draw(draw):
         opp_bracket_2 = TennisPlayer(p3.name + p4.name, p3.country + p4.country, 
                                      max(p3.rank, p4.rank), opp_2_elo)
         #ajout des joueurs potentiels au 2e round
-        opponents_map[p1] = opp_bracket_1
-        opponents_map[p1] = opp_bracket_1
-        opponents_map[p3] = opp_bracket_2
-        opponents_map[p4] = opp_bracket_2
+        opponents_map[p1].append(opp_bracket_2)
+        opponents_map[p2].append(opp_bracket_2)
+        opponents_map[p3].append(opp_bracket_1)
+        opponents_map[p4].append(opp_bracket_1)
 
     return opponents_map
 
@@ -111,8 +111,9 @@ def run_simulation(list_players, num_simulations=10000):
         
         opponents_map = get_opponents_from_draw(draw)
 
-        for player, opponent in opponents_map.items():
-            opponent_strength_dist[player].append(opponent.elo)
+        for player in opponents_map:
+            for opponent in opponents_map[player]:
+                opponent_strength_dist[player].append(opponent.elo)
 
     distributions = {}
     for player in opponent_strength_dist:
@@ -138,12 +139,12 @@ def luck_index(list_players, distributions, draw):
 
     # trie des joueurs
     sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
-    print("\n--- Top 5 des joueurs les plus 'chanceux' (adversaire le plus faible) ---")
-    for player, avg_elo in sorted_by_luck[:5]:
-        print(f"{player}: {avg_elo:.2f} ELO moyen")
-
     print("\n--- Top 5 des joueurs les plus 'malchanceux' (adversaire le plus fort) ---")
-    for player, avg_elo in sorted_by_luck[-5:]:
-        print(f"{player}: {avg_elo:.2f} ELO moyen")
+    for player, luck in sorted_by_luck[:5]:
+        print(f"{player.name}: {luck:.2f} luck index")
+
+    print("\n--- Top 5 des joueurs les plus 'chanceux' (adversaire le plus faible) ---")
+    for player, luck in sorted_by_luck[-5:]:
+        print(f"{player.name}: {luck:.2f} luck index")
     
-    return sorted_by_luck
+    return luck_index
