@@ -159,8 +159,7 @@ def display_luck_index(distributions, luckIndex, player):
 
     plt.plot(X, norm.pdf(X,mu, sigma))
     plt.axvline(x=(1-luckIndex[player]) * 2000, ymin=0, ymax=1, color = 'red')
-
-    plt.title("Probability distribution and Luck index for " + player.name)
+    plt.title(player.name)
 
 def display_random(distributions, luckIndex, list_players, N):
     players = list_players
@@ -171,5 +170,7 @@ def display_random(distributions, luckIndex, list_players, N):
     for i, ax in enumerate(axes.flat):
         if i < len(players) and i < N*N:
             player = players[i]
-            plt.axes(axes.flat[i])
+            plt.axes(ax)
+            ax.set_xticks([])
+            ax.set_yticks([])
             display_luck_index(distributions, luckIndex, player)
