@@ -1,5 +1,7 @@
 from Player import *
 from tirage import *
+from pyscript import document
+
 
 data = pd.read_csv('tennisATPRanking.csv')
 
@@ -27,3 +29,6 @@ luckIndex = luck_index(list_players, distributions, real_draw)
 display_random(distributions, luckIndex, list_players, 3)
 
 plt.show()
+
+output_div = document.querySelector("#plotcurves")
+output_div.innerText = "Hello World"
