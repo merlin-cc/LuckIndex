@@ -1,10 +1,14 @@
-h1 {
+body{
+    background-color: antiquewhite;
+}
 
+h1 {
   /*border: 2px solid powderblue;*/
   background-color: powderblue;
   
   text-align: center;
-  padding: 50px;
+  padding: 25px;
+  margin-bottom: 0;
   /*background-image: url('images.jpg');
   background-size: cover;
   background-repeat: no-repeat;
@@ -14,8 +18,9 @@ h1 {
 
 h2{
   color: black;
+  margin-top : 0;
   font-size : 20px;
   text-align: center;
-  
   background-color: powderblue;
 }
+
