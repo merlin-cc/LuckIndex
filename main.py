@@ -1,6 +1,6 @@
 from Player import *
 from tirage import *
-from pyscript import document
+from pyscript import display
 
 
 data = pd.read_csv('tennisATPRanking.csv')
@@ -28,7 +28,5 @@ luckIndex = luck_index(list_players, distributions, real_draw)
 
 display_random(distributions, luckIndex, list_players, 3)
 
-plt.show()
-
-output_div = document.querySelector("#plotcurves")
-output_div.innerText = "Hello World"
+fig = plt.gcf()  # "Get Current Figure" (récupère le graphique en cours)
+display(fig, target="graphique-container", append=False)
