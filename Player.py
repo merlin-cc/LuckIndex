@@ -25,6 +25,4 @@ def total_players_list(data):
     #we consider that the player is french and his rank is 105 
     #qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) 
     total_players = best_104_players + [TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200))]*24
-
     return total_players
-
