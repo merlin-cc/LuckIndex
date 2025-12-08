@@ -13,3 +13,9 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - Simulation pour avoir la distribtion de probas et la force selon les tirages
 - Calcul du luck index pour un tirage donné. (fictif ou réel)
 - Pour compléter le tirage (24 autres joueurs), on cree un joueur "qualilfié" dont la force est la moyenne de la force des joueurs rank 105 à 208.
+- Passer de pyscript à Flask.
+- Présenter les courbes.
+- Permettre de creer une poule.
+- Permettre à l'utilisateur de choisir un nom parmi une liste défilante.
+- Faire une analyse sur le site pour que des novices puissent comprendre les résultats.
+
