@@ -1,7 +1,5 @@
 from Player import *
 from tirage import *
-from pyscript import display
-
 
 data = pd.read_csv('tennisATPRanking.csv')
 
@@ -26,6 +24,3 @@ luckIndex = luck_index(list_players, distributions, real_draw)
 #plt.axvline(x=(1-luckIndex[list_players[n_player]]) * 2000, ymin=0, ymax=1, color = 'red')
 
 display_random(distributions, luckIndex, list_players, 3)
-
-fig = plt.gcf()  # "Get Current Figure" (récupère le graphique en cours)
-display(fig, target="graphique-container", append=False)
