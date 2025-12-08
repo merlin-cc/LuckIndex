@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from Player import *
 from tirage import *
 import matplotlib
@@ -6,6 +6,7 @@ matplotlib.use('Agg')
 import io
 import base64
 
+######-----------Logique python---------------######
 
 data = pd.read_csv('tennisATPRanking.csv')
 
@@ -22,12 +23,28 @@ plt.savefig(img, format='png', bbox_inches='tight')
 img.seek(0) # Revenir au début du fichier virtuel
 plt.close()
 
-app = Flask (__name__)
-pl_url = base64.b64encode(img.getvalue()).decode('utf8')
+######-----------Définition de l'app---------------######
 
-@app.route("/")
+app = Flask (__name__)
+
+@app.route("/", methods=['GET', 'POST'])
 def welcome():
-    return render_template("welcome.html", plot_url = pl_url)
+    image_a_afficher = None
+    
+    if request.method == 'POST':
+        entree_nombre = request.form.get('nombre_simulations')
+        choix_menu = request.form.get('mode_jeu')
+
+        try:
+            n = int(entree_nombre)
+        except (ValueError, TypeError):
+            n = 100
+
+        image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+
+    return render_template("welcome.html", plot_url=image_a_afficher)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

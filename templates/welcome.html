@@ -9,10 +9,32 @@
   <body>
     <h1>Le luck index</h1>
     Le luck index est une mesure de la chance qu'a eu une équipe (ou un joueur) lors d'un tirage donné.
+    <form method="POST">
+      
+      <label for="nb_sim">Nombre de simulations :</label>
+      <input type="number" id="nb_sim" name="nombre_simulations" value="100" min="10">
+      
+      <br><br>
+
+      <label for="choix_mode">Mode de calcul :</label>
+      <select id="choix_mode" name="mode_jeu">
+          <option value="standard">Standard</option>
+          <option value="experimental">Expérimental</option>
+          <option value="rapide">Mode Rapide</option>
+      </select>
+
+      <br><br>
+
+      <button type="submit">Lancer le calcul</button>
+    </form>
+
+    <hr>
 
     {% if plot_url %}
-        <img src="data:image/png;base64,{{ plot_url }}" alt="Graphique Matplotlib" class="image-centree">
+      <h2>Résultats :</h2>
+      <img src="data:image/png;base64,{{ plot_url }}" alt="Graphique Matplotlib">
+    {% else %}
+      <p>Veuillez lancer une simulation pour voir le graphique.</p>
     {% endif %}
-
   </body>
 </html>
