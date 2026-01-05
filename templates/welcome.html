@@ -18,9 +18,8 @@
 
       <label for="choix_mode">Mode de calcul :</label>
       <select id="choix_mode" name="mode_jeu">
-          <option value="standard">Standard</option>
-          <option value="experimental">Expérimental</option>
-          <option value="rapide">Mode Rapide</option>
+          <option value="Aléatoire">Aléatoire</option>
+          <option value="Manuel">Manuel</option>
       </select>
 
       <br><br>
@@ -31,8 +30,8 @@
       <label>Si un joueur n'est pas dans la liste, remplacez le par le joueur nommé "qualifié".</label>
       <br><br>
 
-      <label for="select_joueur">Choisir un joueur :</label>
-      <select id="select_joueur" name="joueur_rg">
+      <label for="select_joueur1">Choisir un joueur :</label>
+      <select id="select_joueur1" name="joueur1">
         <option value="" disabled selected>-- Sélectionnez le joueur 1 --</option>
         {% for joueur in joueurs %}
         <option value="{{ joueur }}">{{ joueur }}</option>
@@ -41,8 +40,8 @@
 
       <br><br>
       
-      <label for="select_joueur">Choisir un joueur :</label>
-      <select id="select_joueur" name="joueur_rg">
+      <label for="select_joueur2">Choisir un joueur :</label>
+      <select id="select_joueur2" name="joueur2">
         <option value="" disabled selected>-- Sélectionnez le joueur 2 --</option>
         {% for joueur in joueurs %}
         <option value="{{ joueur }}">{{ joueur }}</option>
@@ -51,8 +50,8 @@
 
       <br><br>
 
-      <label for="select_joueur">Choisir un joueur :</label>
-      <select id="select_joueur" name="joueur_rg">
+      <label for="select_joueur3">Choisir un joueur :</label>
+      <select id="select_joueur3" name="joueur3">
         <option value="" disabled selected>-- Sélectionnez le joueur 3 --</option>
         {% for joueur in joueurs %}
         <option value="{{ joueur }}">{{ joueur }}</option>
@@ -61,8 +60,8 @@
 
       <br><br>
 
-      <label for="select_joueur">Choisir un joueur :</label>
-      <select id="select_joueur" name="joueur_rg">
+      <label for="select_joueur4">Choisir un joueur :</label>
+      <select id="select_joueur4" name="joueur4">
         <option value="" disabled selected>-- Sélectionnez le joueur 4 --</option>
         {% for joueur in joueurs %}
         <option value="{{ joueur }}">{{ joueur }}</option>
