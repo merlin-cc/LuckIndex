@@ -11,7 +11,6 @@ import base64
 data = pd.read_csv('tennisATPRanking.csv')
 
 list_players = total_players_list(data)
-
 players_name = get_players_name(data)
 players_name.sort()
 
@@ -22,10 +21,10 @@ app = Flask (__name__)
 @app.route("/", methods=['GET', 'POST'])
 def welcome():
     image_a_afficher = None
+    n = 100
     if request.method == 'POST':
         entree_nombre = request.form.get('nombre_simulations')
         choix_menu = request.form.get('mode_jeu')
-
         
         try:
             n = int(entree_nombre)
@@ -37,12 +36,26 @@ def welcome():
         data = pd.read_csv('tennisATPRanking.csv')
 
         list_players = total_players_list(data)
-
+        index_players = total_players_index(list_players)
         distributions = run_simulation(list_players, n)
         real_draw = createDraws(list_players)
         luckIndex = luck_index(list_players, distributions, real_draw)
 
-        display_random(distributions, luckIndex, list_players, 3, n)
+        if choix_menu == "Aléatoire" :
+            display_random(distributions, luckIndex, list_players, 3, n)
+        
+        if choix_menu == "Manuel":
+            j1_name = str(request.form.get('joueur1'))
+            j2_name = str(request.form.get('joueur2'))
+            j3_name = str(request.form.get('joueur3'))
+            j4_name = str(request.form.get('joueur4'))
+
+            p1 = index_players[j1_name]
+            p2 = index_players[j2_name]
+            p3 = index_players[j3_name]
+            p4 = index_players[j4_name]
+
+            manual_tirage([p1,p2,p3,p4], distributions, luckIndex, n)
 
         img = io.BytesIO()
         plt.savefig(img, format='png', bbox_inches='tight')

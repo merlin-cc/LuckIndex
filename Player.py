@@ -17,6 +17,13 @@ def players_list(data, min_rank, max_rank):
 
     return res
 
+def total_players_index(list_players):
+    res = {}
+    for p in list_players:
+        res[p.name] = p
+
+    return res
+
 def get_players_name(data):
     players_list = total_players_list(data)
     list_name = []
