@@ -6,6 +6,25 @@ matplotlib.use('Agg')
 import io
 import base64
 
+######-----------Logique python---------------######
+
+data = pd.read_csv('tennisATPRanking.csv')
+
+list_players = total_players_list(data)
+
+players_name = get_players_name(data)
+players_name.sort()
+
+distributions = run_simulation(list_players, 100)
+real_draw = createDraws(list_players)
+luckIndex = luck_index(list_players, distributions, real_draw)
+
+display_random(distributions, luckIndex, list_players, 3)
+
+img = io.BytesIO()
+plt.savefig(img, format='png', bbox_inches='tight')
+img.seek(0) # Revenir au début du fichier virtuel
+plt.close()
 
 ######-----------Définition de l'app---------------######
 
@@ -43,7 +62,7 @@ def welcome():
 
         image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
 
-    return render_template("welcome.html", plot_url=image_a_afficher)
+    return render_template("welcome.html", plot_url=image_a_afficher, joueurs = players_name)
 
 
 
