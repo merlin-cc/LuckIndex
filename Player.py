@@ -8,6 +8,7 @@ class TennisPlayer():
         self.rank = rank
         self.elo = elo
 
+
 def players_list(data, min_rank, max_rank):
     assert min_rank>0, "the minimal rank must be >= 1"
     res = []
@@ -16,6 +17,12 @@ def players_list(data, min_rank, max_rank):
 
     return res
 
+def get_players_name(data):
+    players_list = total_players_list(data)
+    list_name = []
+    for player in players_list:
+        list_name.append(player.name)
+    return list_name
 
 def total_players_list(data):
     best_104_players = players_list(data,1, 104)
