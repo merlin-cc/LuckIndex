@@ -25,7 +25,6 @@ def welcome():
     if request.method == 'POST':
         entree_nombre = request.form.get('nombre_simulations')
         choix_menu = request.form.get('mode_jeu')
-
         
         try:
             n = int(entree_nombre)
