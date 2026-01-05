@@ -1,36 +1,101 @@
-body{
-    background-color: antiquewhite;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
 }
 
-h1 {
-  /*border: 2px solid powderblue;*/
-  background-color: powderblue;
-  
-  text-align: center;
-  padding: 25px;
-  margin-bottom: 0;
-  /*background-image: url('images.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;*/
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-h2{
-  color: black;
-  margin-top : 0;
-  font-size : 20px;
-  text-align: center;
-  background-color: powderblue;
+h1 { text-align: center; color: #2c3e50; }
+h3 { color: #34495e; margin-bottom: 15px; }
+
+/* --- STYLE DE L'EXPLICATION (NOUVEAU) --- */
+.luck-explanation {
+    background-color: #eef2f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-left: 5px solid #3498db;
 }
 
-.image-centree {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.scale-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.9em;
 }
 
-button:hover {
-  background-color: powderblue;
+.scale-item {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
+.scale-item.lucky { border-top: 3px solid #2ecc71; }   /* Vert */
+.scale-item.neutral { border-top: 3px solid #f1c40f; } /* Jaune */
+.scale-item.unlucky { border-top: 3px solid #e74c3c; } /* Rouge */
+
+.badge {
+    display: block;
+    font-size: 0.75em;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* --- STYLE DU FORMULAIRE --- */
+.players-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes */
+    gap: 20px;
+}
+
+.player-select {
+    display: flex;
+    flex-direction: column;
+}
+
+select, input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+button.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
