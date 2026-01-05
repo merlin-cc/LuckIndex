@@ -15,17 +15,6 @@ list_players = total_players_list(data)
 players_name = get_players_name(data)
 players_name.sort()
 
-distributions = run_simulation(list_players, 100)
-real_draw = createDraws(list_players)
-luckIndex = luck_index(list_players, distributions, real_draw)
-
-display_random(distributions, luckIndex, list_players, 3)
-
-img = io.BytesIO()
-plt.savefig(img, format='png', bbox_inches='tight')
-img.seek(0) # Revenir au début du fichier virtuel
-plt.close()
-
 ######-----------Définition de l'app---------------######
 
 app = Flask (__name__)
@@ -43,7 +32,7 @@ def welcome():
         except (ValueError, TypeError):
             n = 100
 
-                ######-----------Logique python---------------######
+        ######-----------Logique python---------------######
 
         data = pd.read_csv('tennisATPRanking.csv')
 
