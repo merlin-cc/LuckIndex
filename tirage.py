@@ -175,11 +175,12 @@ def display_random(distributions, luckIndex, list_players, N, num_simulations):
             ax.set_yticks([])
             display_luck_index(distributions, luckIndex, player)
 
-def manual_tirage(players : list[TennisPlayer], distributions, luckIndex):
+def manual_tirage(players : list[TennisPlayer], distributions, luckIndex, num_simulations):
     fig, axes = plt.subplots(2, 2, figsize=(15, 15))
-    fig.suptitle('tirages de joueurs', fontsize=16)
+    fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
     for i, ax in enumerate(axes.flat):
         player = players[i]
+        plt.axes(ax)
         ax.set_xticks([])
         ax.set_yticks([])
         display_luck_index(distributions, luckIndex, player)
