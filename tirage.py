@@ -161,11 +161,11 @@ def display_luck_index(distributions, luckIndex, player):
     plt.axvline(x=(1-luckIndex[player]) * 2000, ymin=0, ymax=1, color = 'red')
     plt.title(player.name)
 
-def display_random(distributions, luckIndex, list_players, N):
+def display_random(distributions, luckIndex, list_players, N, num_simulations):
     players = list_players
     rd.shuffle(players)
     fig, axes = plt.subplots(N, N, figsize=(15, 15))
-    fig.suptitle(f'{N*N} tirages aléatoires de joueurs', fontsize=16)
+    fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
     
     for i, ax in enumerate(axes.flat):
         if i < len(players) and i < N*N:
