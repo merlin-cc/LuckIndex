@@ -53,5 +53,5 @@ def total_players_list(data : pd.DataFrame) -> list[TennisPlayer]:
     elos_105_to_200 = [player.elo for player in players_105_to_200]
     #we consider that the player is french and his rank is 105 
     #qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) 
-    total_players = best_104_players + [TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200))]*24
+    total_players = best_104_players + [TennisPlayer("Qualified " + str(i+1), "France", 105, np.mean(elos_105_to_200)) for i in range(24)]
     return total_players
