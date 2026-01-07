@@ -21,6 +21,7 @@ app = Flask (__name__)
 @app.route("/", methods=['GET', 'POST'])
 def welcome():
     image_a_afficher = None
+    error = None
     n = 100
     if request.method == 'POST':
         entree_nombre = request.form.get('nombre_simulations')
@@ -43,6 +44,12 @@ def welcome():
 
         if choix_menu == "Aléatoire" :
             display_random(distributions, luckIndex, list_players, 3, n)
+            img = io.BytesIO()
+            plt.savefig(img, format='png', bbox_inches='tight')
+            img.seek(0) # Revenir au début du fichier virtuel
+            plt.close()
+
+            image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
         
         if choix_menu == "Manuel":
             j1_name = str(request.form.get('joueur1'))
@@ -55,16 +62,22 @@ def welcome():
             p3 = index_players[j3_name]
             p4 = index_players[j4_name]
 
-            manual_tirage([p1,p2,p3,p4], distributions, luckIndex, n)
+            try:
+                if (p1 == p2 or p1 == p3 or p1 == p4 or p2 == p3 or p2 == p4 or p3 == p4):
+                    raise (SamePlayersError)
+                
+                else:
+                    manual_tirage([p1,p2,p3,p4], distributions, luckIndex, n)
+                    img = io.BytesIO()
+                    plt.savefig(img, format='png', bbox_inches='tight')
+                    img.seek(0) # Revenir au début du fichier virtuel
+                    plt.close()
 
-        img = io.BytesIO()
-        plt.savefig(img, format='png', bbox_inches='tight')
-        img.seek(0) # Revenir au début du fichier virtuel
-        plt.close()
+                    image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+            except SamePlayersError as e:
+                error = e.msg
 
-        image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
-
-    return render_template("welcome.html", plot_url=image_a_afficher, joueurs = players_name)
+    return render_template("welcome.html", plot_url=image_a_afficher, joueurs = players_name, err = error)
 
 
 
