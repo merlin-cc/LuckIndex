@@ -55,3 +55,10 @@ def total_players_list(data : pd.DataFrame) -> list[TennisPlayer]:
     #qualified_player = TennisPlayer("Qualified", "France", 105, np.mean(elos_105_to_200)) 
     total_players = best_104_players + [TennisPlayer("Qualified " + str(i+1), "France", 105, np.mean(elos_105_to_200)) for i in range(24)]
     return total_players
+
+
+##### Errors #####
+class SamePlayersError(Exception):
+    def __init__(self):
+        super().__init__()
+        self.msg = "Un joueur ne peut pas être choisi deux fois, tous les joueurs choisis doivent être différents."
