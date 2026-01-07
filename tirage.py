@@ -38,7 +38,7 @@ All other players (the 96 unseeded players, qualifiers, and wild cards) are draw
 
 #Create the draws
 
-def createDraws(list_players):
+def createDraws(list_players: list[TennisPlayer]) -> dict[TennisPlayer, list[TennisPlayer]]:
     """
     create 32 groups of 4 players with one top32 player in each groups
     """
@@ -64,7 +64,7 @@ def createDraws(list_players):
 
 # Construction of the density of probability using the LLN
 
-def win_probability(elo1, elo2):
+def win_probability(elo1 : int , elo2: int ) -> float:
     """
     Calcule la probabilité que le joueur 1 gagne contre le joueur 2
     en se basant sur la formule ELO.
@@ -72,7 +72,7 @@ def win_probability(elo1, elo2):
     return 1 / (1 + 10**((elo2 - elo1) / 400)) #calcul proposé par le systeme elo
 
 
-def get_opponents_from_draw(draw):
+def get_opponents_from_draw(draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, list[TennisPlayer]]:
     """From a bracket (ordered list of 128 players), create a map of player -> opponent."""
     opponents_map = {}
     for seed in draw:
@@ -102,7 +102,7 @@ def get_opponents_from_draw(draw):
     return opponents_map
 
 # Calcul de la loi de probabilité en utilisant le TLC
-def run_simulation(list_players, num_simulations=10000):
+def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> dict[TennisPlayer, (float, float)]:
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -128,7 +128,7 @@ def run_simulation(list_players, num_simulations=10000):
 
 # Calcul du luck index
 
-def luck_index(list_players, distributions, draw):
+def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, float]:
     luck_index = {}
     opponents_map = get_opponents_from_draw(draw)
     for player in list_players:
@@ -153,7 +153,7 @@ def luck_index(list_players, distributions, draw):
     return luck_index
 
 
-def display_luck_index(distributions, luckIndex, player):
+def display_luck_index(distributions :  dict[TennisPlayer, (float, float)], luckIndex :  dict[TennisPlayer, float], player : TennisPlayer) -> None:
     mu, sigma = distributions[player]
     X = np.linspace(-500 ,5000, 10000)
 
@@ -161,7 +161,7 @@ def display_luck_index(distributions, luckIndex, player):
     plt.axvline(x=(1-luckIndex[player]) * 2000, ymin=0, ymax=1, color = 'red')
     plt.title(player.name)
 
-def display_random(distributions, luckIndex, list_players, N, num_simulations):
+def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
     rd.shuffle(players)
     fig, axes = plt.subplots(N, N, figsize=(15, 15))
@@ -175,7 +175,7 @@ def display_random(distributions, luckIndex, list_players, N, num_simulations):
             ax.set_yticks([])
             display_luck_index(distributions, luckIndex, player)
 
-def manual_tirage(players : list[TennisPlayer], distributions, luckIndex, num_simulations):
+def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], num_simulations : int) -> None:
     fig, axes = plt.subplots(2, 2, figsize=(15, 15))
     fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
     for i, ax in enumerate(axes.flat):

@@ -9,7 +9,11 @@ class TennisPlayer():
         self.elo = elo
 
 
-def players_list(data, min_rank, max_rank):
+def players_list(data : pd.DataFrame, min_rank : int, max_rank : int) -> list[TennisPlayer]:
+    """
+    Returns a list that contains the data of the DataFrame stored a TennisPlayer per
+    player
+    """
     assert min_rank>0, "the minimal rank must be >= 1"
     res = []
     for rank in range(min_rank, max_rank + 1):
@@ -17,21 +21,32 @@ def players_list(data, min_rank, max_rank):
 
     return res
 
-def total_players_index(list_players):
+def total_players_index(list_players : list[TennisPlayer]) -> dict[str, TennisPlayer]:
+    """
+    Create a dictionnary that associate each player name to the TennisPlayer
+    that contains the data of the player
+    """
     res = {}
     for p in list_players:
         res[p.name] = p
 
     return res
 
-def get_players_name(data):
+def get_players_name(data : pd.DataFrame) -> list[str]:
+    """
+    Returns a list with the names of all the players
+    """
     players_list = total_players_list(data)
     list_name = []
     for player in players_list:
         list_name.append(player.name)
     return list_name
 
-def total_players_list(data):
+def total_players_list(data : pd.DataFrame) -> list[TennisPlayer]:
+    """
+    Returns a list with the 104 best players (according to the ATP ranking)
+    that will participate the tournament
+    """
     best_104_players = players_list(data,1, 104)
 
     players_105_to_200 = players_list(data,105, 200)
