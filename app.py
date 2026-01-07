@@ -39,10 +39,10 @@ def welcome():
         list_players = total_players_list(data)
         index_players = total_players_index(list_players)
         distributions = run_simulation(list_players, n)
-        real_draw = createDraws(list_players)
-        luckIndex = luck_index(list_players, distributions, real_draw)
 
         if choix_menu == "Aléatoire" :
+            real_draw = createDraws(list_players)
+            luckIndex = luck_index(list_players, distributions, real_draw)
             display_random(distributions, luckIndex, list_players, 3, n)
             img = io.BytesIO()
             plt.savefig(img, format='png', bbox_inches='tight')
@@ -67,7 +67,7 @@ def welcome():
                     raise (SamePlayersError)
                 
                 else:
-                    manual_tirage([p1,p2,p3,p4], distributions, luckIndex, n)
+                    manual_tirage([p1,p2,p3,p4], distributions, n)
                     img = io.BytesIO()
                     plt.savefig(img, format='png', bbox_inches='tight')
                     img.seek(0) # Revenir au début du fichier virtuel
