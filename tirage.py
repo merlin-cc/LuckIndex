@@ -153,19 +153,35 @@ def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPla
     return luck_index
 
 
-def display_luck_index(distributions :  dict[TennisPlayer, (float, float)], luckIndex :  dict[TennisPlayer, float], player : TennisPlayer) -> None:
+def display_luck_index(distributions: dict[TennisPlayer, (float, float)], luckIndex: dict[TennisPlayer, float], player: TennisPlayer) -> None:
     mu, sigma = distributions[player]
-    X = np.linspace(-500 ,5000, 10000)
 
-    plt.plot(X, norm.pdf(X,mu, sigma))
-    plt.axvline(x=(1-luckIndex[player]) * 2000, ymin=0, ymax=1, color = 'red')
-    plt.title(player.name)
+    x_min = mu - 5 * sigma
+    x_max = mu + 5 * sigma
+
+    val_calculee = norm.ppf(1 - luckIndex[player], loc=mu, scale=sigma)
+    X = np.linspace(x_min, x_max, 1000)
+    Y = norm.pdf(X, mu, sigma)
+
+    plt.plot(X, Y, color='royalblue', linewidth=2.5)
+
+    plt.axvline(x=mu, color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
+    plt.axvline(x=val_calculee, color='black', linewidth=2.5)
+
+    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+
+    plt.title("")
+    plt.xticks([])
+    plt.yticks([])
+    plt.ylim(0, Y.max() * 1.1)
+    plt.xlim(x_min, x_max)
 
 def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
     rd.shuffle(players)
-    fig, axes = plt.subplots(N, N, figsize=(15, 15))
+    fig, axes = plt.subplots(N, N, figsize=(15, 7))
     fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
+    plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
     for i, ax in enumerate(axes.flat):
         if i < len(players) and i < N*N:
@@ -176,8 +192,9 @@ def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex
             display_luck_index(distributions, luckIndex, player)
 
 def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], num_simulations : int) -> None:
-    fig, axes = plt.subplots(2, 2, figsize=(15, 15))
+    fig, axes = plt.subplots(2, 2, figsize=(15, 7))
     fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
+    plt.subplots_adjust(hspace=0.6, wspace=0.3)
     for i, ax in enumerate(axes.flat):
         player = players[i]
         plt.axes(ax)
