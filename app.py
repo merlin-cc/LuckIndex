@@ -74,8 +74,12 @@ def welcome():
                     plt.close()
 
                     image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+
             except SamePlayersError as e:
                 error = e.msg
+
+            except : 
+                error = "Une erreur est survenue"
 
     return render_template("welcome.html", plot_url=image_a_afficher, joueurs = players_name, err = error)
 
