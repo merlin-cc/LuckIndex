@@ -3,6 +3,9 @@ import pulp
 from dataclasses import dataclass
 from typing import List, Dict
 
+###----------Objectif du code----------###
+### Renvoie un dictionnaire {Pool X: [TEAM1, TEAM2, TEAM3, TEAM4]} ###
+
 @dataclass
 class Team:
     name: str
@@ -139,7 +142,7 @@ def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, engl
     model.solve(pulp.PULP_CBC_CMD(msg=0))
     return pulp.LpStatus[model.status] == 'Optimal'
 
-def run_single_draw(pots) -> Dict[str, List[str]]:
+def single_draw(pots) -> Dict[str, List[str]]:
     assigned = [[0] * n for _ in range(nb_groups)]
     shuffled_indices = []
     for p_idx in range(len(pots)):
@@ -181,5 +184,5 @@ def run_single_draw(pots) -> Dict[str, List[str]]:
 # ------------------------------------------------------------
 
 if __name__ == "__main__":
-    pousles_dict = run_single_draw(pots)
+    pousles_dict = single_draw(pots)
     print(pousles_dict)
