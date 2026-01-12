@@ -26,6 +26,11 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - foot :
 - fonctionnement du luck index
 - heritage
+- adapter les fonctions de tirage.py
+
+
+
+
 - essayer d'avoir un api atp
 
 
