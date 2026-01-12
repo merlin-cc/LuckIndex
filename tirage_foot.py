@@ -51,7 +51,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
 
 def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], draw : dict[FootTeam, list[FootTeam]]) -> dict[FootTeam, float]:
     luck_index = {}
-    real_draw = draw_to_teams(single_draw(pots),  list_teams)
+    real_draw = draw_to_teams(draw,  list_teams)
 
     for pool in real_draw:
             for team in real_draw[pool]:
@@ -109,21 +109,8 @@ def display_random_foot(distributions : dict[FootTeam, (float, float)], luckInde
     
     for i, ax in enumerate(axes.flat):
         if i < len(teams) and i < N*N:
-            player = teams[i]
+            team = teams[i]
             plt.axes(ax)
             ax.set_xticks([])
             ax.set_yticks([])
-            display_luck_index_foot(distributions, luckIndex, player)
-
-def manual_tirage_foot(teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], num_simulations : int) -> None:
-    draw = {teams[0] : [teams[1], teams[2], teams[3]]}
-    luckIndex = luck_index_foot(teams, distributions, draw)
-    fig, axes = plt.subplots(2, 2, figsize=(15, 7))
-    fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
-    plt.subplots_adjust(hspace=0.6, wspace=0.3)
-    for i, ax in enumerate(axes.flat):
-        team = teams[i]
-        plt.axes(ax)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        display_luck_index_foot(distributions, luckIndex, team)
+            display_luck_index_foot(distributions, luckIndex, team)
