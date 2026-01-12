@@ -115,8 +115,10 @@ def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> 
         opponents_map = get_opponents_from_draw(draw)
 
         for player in opponents_map:
+            strength = 0
             for opponent in opponents_map[player]:
-                opponent_strength_dist[player].append(opponent.elo)
+                strength += opponent.elo
+            opponent_strength_dist[player].append(strength/2)  #average strength
 
     distributions = {}
     for player in opponent_strength_dist:
@@ -132,13 +134,13 @@ def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPla
     luck_index = {}
     opponents_map = get_opponents_from_draw(draw)
     for player in list_players:
-        average_opponent_elo = 0
+        avg_opponent_elo = 0
         for opponent in opponents_map[player]:
-            average_opponent_elo += opponent.elo/2
+            avg_opponent_elo += opponent.elo/2
 
         mu, sigma = distributions[player]
 
-        luck_index[player] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
+        luck_index[player] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, avg_opponent_elo)[0]
 
     # trie des joueurs
     sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
