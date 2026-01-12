@@ -21,6 +21,11 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 
 - Regle Tournoi Roland Garros
 - Display le classement ATP utilisé
+- regle de Roland Garros
+- Ajout des exceptions pour eviter des tirages interdits
+- foot :
+- fonctionnement du luck index
+- heritage
 - essayer d'avoir un api atp
 
 
