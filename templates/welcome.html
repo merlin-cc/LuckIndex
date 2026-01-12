@@ -5,24 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{{ url_for('static', filename='welcome.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <title>Luck Index - Tennis Analytics</title>
-
+    <title>Luck Index - Tennis & Football Analytics</title>
 
     <style>
+        /* LOGIQUE D'AFFICHAGE EXISTANTE (TENNIS) */
         #container-joueurs {
             display: none;
         }
-
         #choix_manuel:checked ~ #container-joueurs {
             display: block;
+        }
+
+        /* --- LOGIQUE DES ONGLETS SANS JAVASCRIPT --- */
+        /* On cache les boutons radio qui servent de commutateurs d'onglets */
+        .tab-switch {
+            display: none;
+        }
+
+        /* Par défaut, on cache le contenu des onglets */
+        .tab-content {
+            display: none;
+        }
+
+        /* Affichage du contenu en fonction de l'onglet coché */
+        #tab-tennis:checked ~ #content-tennis,
+        #tab-football:checked ~ #content-football {
+            display: block;
+        }
+
+        /* Style de la barre d'onglets */
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-label {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            border-bottom: none;
+            margin-bottom: -2px; /* Pour couvrir la bordure du bas */
+        }
+
+        /* État actif de l'onglet Tennis */
+        #tab-tennis:checked ~ .tabs-header label[for="tab-tennis"] {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        /* État actif de l'onglet Football */
+        #tab-football:checked ~ .tabs-header label[for="tab-football"] {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
         }
 
         .radio-group {
             display: inline-block;
         }
     </style>
-
-  
   </head>
   <body>
     
@@ -30,12 +79,21 @@
         
         <header class="site-header">
             <h1>Le Luck Index</h1>
-            <p class="subtitle">Analyse de la chance au tirage au sort (Roland Garros)</p>
+            <p class="subtitle">Analyse de la chance au tirage au sort</p>
         </header>
 
         <div class="content-card">
             
-          <div class="info-box">
+            <input type="radio" name="sport_toggle" id="tab-tennis" class="tab-switch" checked>
+            <input type="radio" name="sport_toggle" id="tab-football" class="tab-switch">
+
+            <div class="tabs-header">
+                <label for="tab-tennis" class="tab-label">Tennis</label>
+                <label for="tab-football" class="tab-label">Football</label>
+            </div>
+
+            <div id="content-tennis" class="tab-content">
+                          <div class="info-box">
             <h3> Qu'est-ce que le Luck Index ?</h3>
             <p class="definition-text">
                 C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à des milliers de tirages aléatoires.
@@ -70,85 +128,79 @@
                   </ul>
                 </div>
             </div>
-        </div>
-
-            <form method="POST">
-                
-                <div class="section-title">Paramètres</div>
-                <div class="settings-grid">
-                    <div class="form-group">
-                        <label for="nb_sim">Nombre de simulations</label>
-                        <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(100) }}" min="10" class="form-control">
-                    </div>
                 </div>
 
-                <label>Mode de calcul :</label>
-                <input type="radio" id="choix_aleatoire" name="mode_jeu" value="Aléatoire" checked>
-                <label for="choix_aleatoire">Aléatoire</label>
-                
-                <input type="radio" id="choix_manuel" name="mode_jeu" value="Manuel">
-                <label for="choix_manuel">Manuel</label>
+                <form method="POST">
+                    <input type="hidden" name="sport" value="tennis">
+                    
+                    <div class="section-title">Paramètres</div>
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label for="nb_sim">Nombre de simulations</label>
+                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(100) }}" min="10" class="form-control">
+                        </div>
+                    </div>
 
-                <div id="container-joueurs">
-                    <hr class="divider">
-                    <div class="section-title">Sélection Manuel</div>
-                    <p class="instruction-text">
-                        Si vous choisissez le mode <strong>Manuel</strong>, sélectionnez 4 joueurs ci-dessous.
-                        (Si un joueur manque, choisissez "Qualifié").
+                    <label>Mode de calcul :</label>
+                    <input type="radio" id="choix_aleatoire" name="mode_jeu" value="Aléatoire" checked>
+                    <label for="choix_aleatoire">Aléatoire</label>
+                    
+                    <input type="radio" id="choix_manuel" name="mode_jeu" value="Manuel">
+                    <label for="choix_manuel">Manuel</label>
+
+                    <div id="container-joueurs">
+                        <hr class="divider">
+                        <div class="section-title">Sélection Manuelle</div>
+                        <div class="players-grid">
+                            {% for i in range(1, 5) %}
+                            <div class="player-card">
+                                <label for="j{{i}}" class="player-label">Joueur {{i}}</label>
+                                <select id="j{{i}}" name="joueur{{i}}" class="form-control">
+                                    <option value="" disabled selected>-- Choisir --</option>
+                                    {% for joueur in joueurs %}
+                                    <option value="{{ joueur }}">{{ joueur }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <button type="submit" class="btn-primary">Lancer le calcul</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="content-football" class="tab-content">
+                <div class="info-box">
+                    <h3> Qu'est-ce que le Luck Index Football ?</h3>
+                    <p class="definition-text">
+                        Analyse du tirage des phases de groupes de coupe du monde 2026. 
                     </p>
-
-                    <div class="players-grid">
-                    <div class="player-card">
-                        <label for="j1" class="player-label">Joueur 1</label>
-                        <select id="j1" name="joueur1" class="form-control">
-                            <option value="" disabled selected>-- Choisir --</option>
-                            {% for joueur in joueurs %}
-                            <option value="{{ joueur }}">{{ joueur }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="player-card">
-                        <label for="j2" class="player-label">Joueur 2</label>
-                        <select id="j2" name="joueur2" class="form-control">
-                            <option value="" disabled selected>-- Choisir --</option>
-                            {% for joueur in joueurs %}
-                            <option value="{{ joueur }}">{{ joueur }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="player-card">
-                        <label for="j3" class="player-label">Joueur 3</label>
-                        <select id="j3" name="joueur3" class="form-control">
-                            <option value="" disabled selected>-- Choisir --</option>
-                            {% for joueur in joueurs %}
-                            <option value="{{ joueur }}">{{ joueur }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="player-card">
-                        <label for="j4" class="player-label">Joueur 4</label>
-                        <select id="j4" name="joueur4" class="form-control">
-                            <option value="" disabled selected>-- Choisir --</option>
-                            {% for joueur in joueurs %}
-                            <option value="{{ joueur }}">{{ joueur }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
                 </div>
 
-                <div class="action-area">
-                    <button type="submit" class="btn-primary">Lancer le calcul 🚀</button>
-                </div>
-            </form>
+                <form method="POST">
+                    <input type="hidden" name="sport" value="football">
+                    
+                    <div class="section-title">Paramètres</div>
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label for="nb_sim_foot">Nombre de simulations</label>
+                            <input type="number" id="nb_sim_foot" name="nombre_simulations" value="100" min="10" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <button type="submit" class="btn-primary" style="background-color: #3498db;">Lancer le calcul</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         {% if err %}
         <div class="content-card result-card">
-            <h2>{{ err }}</h2>
+            <h2 style="color: #e74c3c;">{{ err }}</h2>
         </div>
         {% endif %}
 
@@ -156,7 +208,7 @@
         <div class="content-card result-card">
             <h2>Résultats de l'analyse</h2>
             <div class="plot-container">
-                <img src="data:image/png;base64,{{ plot_url }}" alt="Graphique Matplotlib">
+                <img src="data:image/png;base64,{{ plot_url }}" alt="Graphique de résultats">
             </div>
         </div>
         {% endif %}
