@@ -19,4 +19,8 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - Permettre à l'utilisateur de choisir un nom parmi une liste défilante.
 - Faire une analyse sur le site pour que des novices puissent comprendre les résultats.
 
+- Regle Tournoi Roland Garros
+- Display le classement ATP utilisé
+- essayer d'avoir un api atp
+
 
