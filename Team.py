@@ -8,15 +8,14 @@ class FootTeam():
         self.elo = elo
 
 
-def teams_list(data : pd.DataFrame, min_rank : int, max_rank : int) -> list[FootTeam]:
-    assert min_rank>0, "the minimal rank must be >= 1"
+def teams_list(data : pd.DataFrame) -> list[FootTeam]:
     res = []
-    for rank in range(min_rank, max_rank + 1):
-        res.append(FootTeam(data.loc[rank-1]['Team'], data.loc[rank-1]['Rank'], data.loc[rank-1]['Rating']))
+    for k in range(len(data)):
+        res.append(FootTeam(data.loc[k]['Team'], data.loc[k]['Rank'], data.loc[k]['Rating']))
     return res
 
-def total_teams_index(list_players : list[FootTeam]) -> dict[str, FootTeam]:
+def total_teams_index(list_teams : list[FootTeam]) -> dict[str, FootTeam]:
     res = {}
-    for p in list_players:
+    for p in list_teams:
         res[p.name] = p
     return res
