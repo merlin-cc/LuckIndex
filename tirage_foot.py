@@ -42,7 +42,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
 
 # Calcul du luck index
 
-def luck_index(list_teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], draw : dict[FootTeam, list[FootTeam]]) -> dict[FootTeam, float]:
+def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], draw : dict[FootTeam, list[FootTeam]]) -> dict[FootTeam, float]:
     luck_index = {}
     real_draw = single_draw(pots)
 
@@ -71,7 +71,7 @@ def luck_index(list_teams : list[FootTeam], distributions : dict[FootTeam, (floa
     return luck_index
 
 
-def display_luck_index(distributions: dict[FootTeam, (float, float)], luckIndex: dict[FootTeam, float], team: FootTeam) -> None:
+def display_luck_index_foot(distributions: dict[FootTeam, (float, float)], luckIndex: dict[FootTeam, float], team: FootTeam) -> None:
     mu, sigma = distributions[team]
 
     x_min = mu - 5 * sigma
@@ -94,7 +94,7 @@ def display_luck_index(distributions: dict[FootTeam, (float, float)], luckIndex:
     plt.ylim(0, Y.max() * 1.1)
     plt.xlim(x_min, x_max)
 
-def display_random(distributions : dict[FootTeam, (float, float)], luckIndex : dict[FootTeam, float], list_teams : list[FootTeam], N : int, num_simulations : int) -> None:
+def display_random_foot(distributions : dict[FootTeam, (float, float)], luckIndex : dict[FootTeam, float], list_teams : list[FootTeam], N : int, num_simulations : int) -> None:
     teams = list_teams
     rd.shuffle(teams)
     fig, axes = plt.subplots(N, N, figsize=(15, 7))
@@ -107,11 +107,11 @@ def display_random(distributions : dict[FootTeam, (float, float)], luckIndex : d
             plt.axes(ax)
             ax.set_xticks([])
             ax.set_yticks([])
-            display_luck_index(distributions, luckIndex, player)
+            display_luck_index_foot(distributions, luckIndex, player)
 
-def manual_tirage(teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], num_simulations : int) -> None:
+def manual_tirage_foot(teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], num_simulations : int) -> None:
     draw = {teams[0] : [teams[1], teams[2], teams[3]]}
-    luckIndex = luck_index(teams, distributions, draw)
+    luckIndex = luck_index_foot(teams, distributions, draw)
     fig, axes = plt.subplots(2, 2, figsize=(15, 7))
     fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
@@ -120,4 +120,4 @@ def manual_tirage(teams : list[FootTeam], distributions : dict[FootTeam, (float,
         plt.axes(ax)
         ax.set_xticks([])
         ax.set_yticks([])
-        display_luck_index(distributions, luckIndex, team)
+        display_luck_index_foot(distributions, luckIndex, team)
