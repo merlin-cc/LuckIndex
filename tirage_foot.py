@@ -21,7 +21,7 @@ def draw_to_teams(draw, list_teams):
     return res
 
 
-def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[FootTeam, (float, float)]:
+def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, (float, float)]:
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -37,7 +37,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
                 for opponent in draw[pool]:
                     if opponent != team:
                         strenght += opponent.elo
-                opponent_strength_dist[team].append(strenght)
+                opponent_strength_dist[team.name].append(strenght)
 
     distributions = {}
     for team in opponent_strength_dist:
@@ -49,7 +49,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
 
 # Calcul du luck index
 
-def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], draw : dict[FootTeam, list[FootTeam]]) -> dict[FootTeam, float]:
+def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (float, float)], draw) -> dict[str, float]:
     luck_index = {}
     real_draw = draw_to_teams(draw,  list_teams)
 
@@ -61,10 +61,11 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, 
                         elo += opponent.elo
                 average_opponent_elo = elo/(len(real_draw[pool])-1)
 
-                mu, sigma = distributions[team]
-                luck_index[team] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
+                mu, sigma = distributions[team.name]
+                luck_index[team.name] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
 
     # trie des joueurs
+    """
     sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
     print("\n--- Top 5 des teams les plus 'malchanceux' (adversaire le plus fort) ---")
     for team, luck in sorted_by_luck[:5]:
@@ -73,11 +74,12 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, 
     print("\n--- Top 5 des teams les plus 'chanceux' (adversaire le plus faible) ---")
     for team, luck in sorted_by_luck[-5:]:
         print(f"{team.name}: {luck:.2f} luck index")
+        """
     
     return luck_index
 
 
-def display_luck_index_foot(distributions: dict[FootTeam, (float, float)], luckIndex: dict[FootTeam, float], team: FootTeam) -> None:
+def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, float], team: str) -> None:
     mu, sigma = distributions[team]
 
     x_min = mu - 5 * sigma
@@ -92,7 +94,7 @@ def display_luck_index_foot(distributions: dict[FootTeam, (float, float)], luckI
     plt.axvline(x=mu, color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
     plt.axvline(x=val_calculee, color='black', linewidth=2.5)
 
-    plt.xlabel(f"{team.name}\nLuck index = {100*luckIndex[team]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+    plt.xlabel(f"{team}\nLuck index = {100*luckIndex[team]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
 
     plt.title("")
     plt.xticks([])
@@ -100,8 +102,8 @@ def display_luck_index_foot(distributions: dict[FootTeam, (float, float)], luckI
     plt.ylim(0, Y.max() * 1.1)
     plt.xlim(x_min, x_max)
 
-def display_random_foot(distributions : dict[FootTeam, (float, float)], luckIndex : dict[FootTeam, float], list_teams : list[FootTeam], N : int, num_simulations : int) -> None:
-    teams = list_teams
+def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, float], N : int, num_simulations : int) -> None:
+    teams = list(distributions.keys())
     rd.shuffle(teams)
     fig, axes = plt.subplots(N, N, figsize=(15, 7))
     fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)

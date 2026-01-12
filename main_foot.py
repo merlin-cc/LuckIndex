@@ -9,5 +9,5 @@ distributions = run_simulation(list_teams, 3)
 real_draw = single_draw(pots)
 luckIndex = luck_index_foot(list_teams, distributions, real_draw)
 
-display_random_foot(distributions, luckIndex, list_teams, 3, 10)
+display_random_foot(distributions, luckIndex, 3, 10)
 plt.show()
