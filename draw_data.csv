@@ -1,0 +1,241 @@
+simulation_id,group,team_name,pot,confederations
+1,A,Mexico,1,CONCACAF
+1,A,Senegal,2,CAF
+1,A,Saudi Arabia,3,AFC
+1,A,UEFA 2,4,UEFA
+1,B,Canada,1,CONCACAF
+1,B,Croatia,2,UEFA
+1,B,Norway,3,UEFA
+1,B,Cape Verde,4,CAF
+1,C,Spain,1,UEFA
+1,C,Switzerland,2,UEFA
+1,C,Paraguay,3,CONMEBOL
+1,C,FIFA 1,4,"OFC,CONCACAF,CAF"
+1,D,United States,1,CONCACAF
+1,D,Australia,2,AFC
+1,D,South Africa,3,CAF
+1,D,UEFA 1,4,UEFA
+1,E,Belgium,1,UEFA
+1,E,Austria,2,UEFA
+1,E,Qatar,3,AFC
+1,E,New Zealand,4,OFC
+1,F,England,1,UEFA
+1,F,Uruguay,2,CONMEBOL
+1,F,Algeria,3,CAF
+1,F,Jordan,4,AFC
+1,G,Argentina,1,CONMEBOL
+1,G,Iran,2,AFC
+1,G,Ivory Coast,3,CAF
+1,G,UEFA 4,4,UEFA
+1,H,Netherlands,1,UEFA
+1,H,Ecuador,2,CONMEBOL
+1,H,Egypt,3,CAF
+1,H,Haiti,4,CONCACAF
+1,I,Brazil,1,CONMEBOL
+1,I,Japan,2,AFC
+1,I,Tunisia,3,CAF
+1,I,UEFA 3,4,UEFA
+1,J,Portugal,1,UEFA
+1,J,South Korea,2,AFC
+1,J,Panama,3,CONCACAF
+1,J,Ghana,4,CAF
+1,K,Germany,1,UEFA
+1,K,Morocco,2,CAF
+1,K,Scotland,3,UEFA
+1,K,FIFA 2,4,"CONMEBOL,AFC,CONCACAF"
+1,L,France,1,UEFA
+1,L,Colombia,2,CONMEBOL
+1,L,Uzbekistan,3,AFC
+1,L,Curaçao,4,CONCACAF
+2,A,Mexico,1,CONCACAF
+2,A,Colombia,2,CONMEBOL
+2,A,South Africa,3,CAF
+2,A,UEFA 2,4,UEFA
+2,B,Canada,1,CONCACAF
+2,B,South Korea,2,AFC
+2,B,Egypt,3,CAF
+2,B,UEFA 1,4,UEFA
+2,C,France,1,UEFA
+2,C,Australia,2,AFC
+2,C,Panama,3,CONCACAF
+2,C,Ghana,4,CAF
+2,D,United States,1,CONCACAF
+2,D,Senegal,2,CAF
+2,D,Uzbekistan,3,AFC
+2,D,UEFA 3,4,UEFA
+2,E,Spain,1,UEFA
+2,E,Ecuador,2,CONMEBOL
+2,E,Ivory Coast,3,CAF
+2,E,Curaçao,4,CONCACAF
+2,F,Brazil,1,CONMEBOL
+2,F,Morocco,2,CAF
+2,F,Scotland,3,UEFA
+2,F,Haiti,4,CONCACAF
+2,G,Belgium,1,UEFA
+2,G,Uruguay,2,CONMEBOL
+2,G,Algeria,3,CAF
+2,G,Jordan,4,AFC
+2,H,Germany,1,UEFA
+2,H,Iran,2,AFC
+2,H,Paraguay,3,CONMEBOL
+2,H,Cape Verde,4,CAF
+2,I,England,1,UEFA
+2,I,Switzerland,2,UEFA
+2,I,Qatar,3,AFC
+2,I,New Zealand,4,OFC
+2,J,Argentina,1,CONMEBOL
+2,J,Japan,2,AFC
+2,J,Norway,3,UEFA
+2,J,UEFA 4,4,UEFA
+2,K,Netherlands,1,UEFA
+2,K,Austria,2,UEFA
+2,K,Tunisia,3,CAF
+2,K,FIFA 2,4,"CONMEBOL,AFC,CONCACAF"
+2,L,Portugal,1,UEFA
+2,L,Croatia,2,UEFA
+2,L,Saudi Arabia,3,AFC
+2,L,FIFA 1,4,"OFC,CONCACAF,CAF"
+3,A,Mexico,1,CONCACAF
+3,A,Japan,2,AFC
+3,A,Algeria,3,CAF
+3,A,UEFA 4,4,UEFA
+3,B,Canada,1,CONCACAF
+3,B,Switzerland,2,UEFA
+3,B,Paraguay,3,CONMEBOL
+3,B,Cape Verde,4,CAF
+3,C,Argentina,1,CONMEBOL
+3,C,Croatia,2,UEFA
+3,C,Panama,3,CONCACAF
+3,C,Jordan,4,AFC
+3,D,United States,1,CONCACAF
+3,D,Iran,2,AFC
+3,D,Tunisia,3,CAF
+3,D,UEFA 2,4,UEFA
+3,E,Netherlands,1,UEFA
+3,E,Ecuador,2,CONMEBOL
+3,E,Uzbekistan,3,AFC
+3,E,New Zealand,4,OFC
+3,F,Germany,1,UEFA
+3,F,Austria,2,UEFA
+3,F,South Africa,3,CAF
+3,F,FIFA 2,4,"CONMEBOL,AFC,CONCACAF"
+3,G,Spain,1,UEFA
+3,G,Morocco,2,CAF
+3,G,Saudi Arabia,3,AFC
+3,G,Curaçao,4,CONCACAF
+3,H,Portugal,1,UEFA
+3,H,Senegal,2,CAF
+3,H,Scotland,3,UEFA
+3,H,Haiti,4,CONCACAF
+3,I,England,1,UEFA
+3,I,South Korea,2,AFC
+3,I,Egypt,3,CAF
+3,I,UEFA 1,4,UEFA
+3,J,Brazil,1,CONMEBOL
+3,J,Australia,2,AFC
+3,J,Ivory Coast,3,CAF
+3,J,UEFA 3,4,UEFA
+3,K,France,1,UEFA
+3,K,Colombia,2,CONMEBOL
+3,K,Qatar,3,AFC
+3,K,Ghana,4,CAF
+3,L,Belgium,1,UEFA
+3,L,Uruguay,2,CONMEBOL
+3,L,Norway,3,UEFA
+3,L,FIFA 1,4,"OFC,CONCACAF,CAF"
+4,A,Mexico,1,CONCACAF
+4,A,Senegal,2,CAF
+4,A,Scotland,3,UEFA
+4,A,UEFA 3,4,UEFA
+4,B,Canada,1,CONCACAF
+4,B,Uruguay,2,CONMEBOL
+4,B,Tunisia,3,CAF
+4,B,UEFA 4,4,UEFA
+4,C,France,1,UEFA
+4,C,Iran,2,AFC
+4,C,Egypt,3,CAF
+4,C,Curaçao,4,CONCACAF
+4,D,United States,1,CONCACAF
+4,D,Japan,2,AFC
+4,D,Ivory Coast,3,CAF
+4,D,UEFA 1,4,UEFA
+4,E,Belgium,1,UEFA
+4,E,Ecuador,2,CONMEBOL
+4,E,Algeria,3,CAF
+4,E,UEFA 2,4,UEFA
+4,F,England,1,UEFA
+4,F,Morocco,2,CAF
+4,F,Qatar,3,AFC
+4,F,New Zealand,4,OFC
+4,G,Portugal,1,UEFA
+4,G,South Korea,2,AFC
+4,G,Panama,3,CONCACAF
+4,G,Ghana,4,CAF
+4,H,Germany,1,UEFA
+4,H,Australia,2,AFC
+4,H,Paraguay,3,CONMEBOL
+4,H,FIFA 1,4,"OFC,CONCACAF,CAF"
+4,I,Spain,1,UEFA
+4,I,Switzerland,2,UEFA
+4,I,South Africa,3,CAF
+4,I,FIFA 2,4,"CONMEBOL,AFC,CONCACAF"
+4,J,Brazil,1,CONMEBOL
+4,J,Austria,2,UEFA
+4,J,Norway,3,UEFA
+4,J,Jordan,4,AFC
+4,K,Netherlands,1,UEFA
+4,K,Colombia,2,CONMEBOL
+4,K,Saudi Arabia,3,AFC
+4,K,Cape Verde,4,CAF
+4,L,Argentina,1,CONMEBOL
+4,L,Croatia,2,UEFA
+4,L,Uzbekistan,3,AFC
+4,L,Haiti,4,CONCACAF
+5,A,Mexico,1,CONCACAF
+5,A,Colombia,2,CONMEBOL
+5,A,Qatar,3,AFC
+5,A,UEFA 1,4,UEFA
+5,B,Canada,1,CONCACAF
+5,B,Japan,2,AFC
+5,B,Paraguay,3,CONMEBOL
+5,B,UEFA 2,4,UEFA
+5,C,Germany,1,UEFA
+5,C,Ecuador,2,CONMEBOL
+5,C,Ivory Coast,3,CAF
+5,C,Jordan,4,AFC
+5,D,United States,1,CONCACAF
+5,D,Uruguay,2,CONMEBOL
+5,D,Algeria,3,CAF
+5,D,UEFA 4,4,UEFA
+5,E,England,1,UEFA
+5,E,Austria,2,UEFA
+5,E,Panama,3,CONCACAF
+5,E,Cape Verde,4,CAF
+5,F,Portugal,1,UEFA
+5,F,Morocco,2,CAF
+5,F,Saudi Arabia,3,AFC
+5,F,Haiti,4,CONCACAF
+5,G,Netherlands,1,UEFA
+5,G,Croatia,2,UEFA
+5,G,Uzbekistan,3,AFC
+5,G,FIFA 1,4,"OFC,CONCACAF,CAF"
+5,H,Spain,1,UEFA
+5,H,Iran,2,AFC
+5,H,Tunisia,3,CAF
+5,H,New Zealand,4,OFC
+5,I,Brazil,1,CONMEBOL
+5,I,Australia,2,AFC
+5,I,Scotland,3,UEFA
+5,I,Ghana,4,CAF
+5,J,France,1,UEFA
+5,J,South Korea,2,AFC
+5,J,Egypt,3,CAF
+5,J,Curaçao,4,CONCACAF
+5,K,Argentina,1,CONMEBOL
+5,K,Senegal,2,CAF
+5,K,Norway,3,UEFA
+5,K,UEFA 3,4,UEFA
+5,L,Belgium,1,UEFA
+5,L,Switzerland,2,UEFA
+5,L,South Africa,3,CAF
+5,L,FIFA 2,4,"CONMEBOL,AFC,CONCACAF"

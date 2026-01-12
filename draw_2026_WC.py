@@ -1,5 +1,6 @@
 import random
 import time
+import csv
 from dataclasses import dataclass
 from typing import List, Dict
 import pulp
@@ -81,6 +82,21 @@ france_idx = 5
 england_idx = 6
 
 def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, england_idx):
+    """
+    Check feasibility of a team-to-group assignment under draw constraints.
+
+    Args:
+        assigned: a matrix indicating already fixed assignments
+            assigned[g][i] == 1 means team i is already assigned to group g.
+        pots: a list of pots, where each pot is a list of teams.
+        spain_idx: index of Spain.
+        argentina_idx: index of Argentina.
+        france_idx: index of France.
+        england_idx: index of England.
+
+    Returns:
+        Bool: true if a feasible assignment exists given the already assigned teams.
+    """
     model = pulp.LpProblem("Draw_Feasibility", pulp.LpMinimize)
     
     x = pulp.LpVariable.dicts("x", (range(nb_groups), range(n)), cat=pulp.LpBinary)
@@ -125,11 +141,11 @@ def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, engl
     model.solve(pulp.PULP_CBC_CMD(msg=0))
     return pulp.LpStatus[model.status] == 'Optimal'
 
-def draw(pots, logger, nb_draws):
-    results = [None] * nb_draws
+def draw(pots, nb_simulations):
     initial_time = time.time()
+    csv_data = []
 
-    for N in range(nb_draws):
+    for sim_id in range(1, nb_simulations + 1):
         assigned = [[0] * n for _ in range(nb_groups)]
         shuffled_indices = [None] * len(pots)
 
@@ -150,79 +166,82 @@ def draw(pots, logger, nb_draws):
             pot_ranges.append(list(range(idx, idx + len(pots[p_idx]))))
             idx += len(pots[p_idx])
 
-        logger.write("==============================\n")
-        logger.write("=== POT 1 (special rules) ===\n")
-        logger.write("==============================\n\n")
-
-        logger.write("\nMexico (CONCACAF)\nGroup A\n")
         assigned[0][0] = 1
-        logger.write("\nCanada (CONCACAF)\nGroup B\n")
         assigned[1][1] = 1
-        logger.write("\nUnited States (CONCACAF)\nGroup D\n")
         assigned[3][2] = 1
 
         for k in shuffled_indices[0][3:]:
             i = pot_ranges[0][k]
-            team = all_teams[i]
-            logger.write(f"\n{team.name} ({','.join(team.confs)})\n")
             for g in range(nb_groups):
                 if sum(assigned[g][j] for j in pot_ranges[0]) < 1:
-                    logger.write(f"Group {chr(65 + g)}\n")
                     assigned[g][i] = 1
                     if feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, england_idx):
-                        logger.write(" Yes\n")
                         break
                     else:
-                        logger.write(" No\n")
                         assigned[g][i] = 0
 
         for p_idx in range(1, len(pots)):
-            logger.write("\n==============================\n")
-            logger.write(f"=== POT {p_idx + 1} ===\n")
-            logger.write("==============================\n\n")
             for k in shuffled_indices[p_idx]:
                 i = pot_ranges[p_idx][k]
-                team = all_teams[i]
-                logger.write(f"\n{team.name} ({','.join(team.confs)})\n")
                 for g in range(nb_groups):
                     if sum(assigned[g][j] for j in pot_ranges[p_idx]) < 1:
-                        logger.write(f"Group {chr(65 + g)}\n")
                         assigned[g][i] = 1
                         if feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, england_idx):
-                            logger.write(" Yes\n")
                             break
                         else:
-                            logger.write(" No\n")
                             assigned[g][i] = 0
 
-        pairs = []
         for g in range(nb_groups):
-            team_indices = [idx for idx in range(n) if assigned[g][idx] == 1]
-            for i_idx in range(len(team_indices)):
-                for j_idx in range(i_idx + 1, len(team_indices)):
-                    pairs.append(f"({team_indices[i_idx]+1}, {team_indices[j_idx]+1})")
-        results[N] = " ".join(pairs)
+            for i_team in range(n):
+                if assigned[g][i_team] == 1:
+                    team = all_teams[i_team]
+                    pot_num = 0
+                    for p_idx, r in enumerate(pot_ranges):
+                        if i_team in r:
+                            pot_num = p_idx + 1
+                            break
+                    csv_data.append({
+                        "simulation_id": sim_id,
+                        "group": chr(65 + g),
+                        "team_name": team.name,
+                        "pot": pot_num,
+                        "confederations": ",".join(team.confs)
+                    })
 
-        with open("draw_example.txt", "w") as groupfile:
-            for g in range(nb_groups):
-                groupfile.write("====================\n")
-                groupfile.write(f"Group {chr(65 + g)}\n")
-                groupfile.write("====================\n")
-                for i_team in range(n):
-                    if assigned[g][i_team] == 1:
-                        team = all_teams[i_team]
-                        groupfile.write(f"{team.name} ({','.join(team.confs)})\n")
-                groupfile.write("\n")
-
-    with open("draw_results.txt", "a") as f:
-        for r in results:
-            f.write(r + "\n")
+    with open("draw_data.csv", "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["simulation_id", "group", "team_name", "pot", "confederations"])
+        writer.writeheader()
+        writer.writerows(csv_data)
 
     final_time = time.time() - initial_time
-    print(f"Execution time for {nb_draws} draws: {round(final_time, 1)}s")
-    return 0
+    print(f"Execution time: {round(final_time, 1)}s")
+
+    final_time = time.time() - initial_time
+    print(f"Execution time: {round(final_time, 1)}s")
+
+
+import csv
+
+def get_groups_as_dict(csv_path, simulation_id=1):
+    groups_dict = {}
+    with open(csv_path, mode='r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if int(row['simulation_id']) == simulation_id:
+                key = f"Poule {row['group']}"
+                if key not in groups_dict:
+                    groups_dict[key] = []
+                groups_dict[key].append(row['team_name'])
+    return groups_dict
+
+
+# ------------------------------------------------------------
+# Execution
+# ------------------------------------------------------------
 
 if __name__ == "__main__":
-    nb_draws = 2
-    with open("draw_log.txt", "w") as logger:
-        draw(pots, logger, nb_draws)
+    nb_simulations = 5
+    draw(pots, nb_simulations)
+    result = get_groups_as_dict('draw_data.csv', simulation_id=1)
+    print(result)
+
