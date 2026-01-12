@@ -66,12 +66,20 @@ pot4 = [
     Team("Curaçao", ["CONCACAF"]),
     Team("Haiti", ["CONCACAF"]),
     Team("New Zealand", ["OFC"]),
-    Team("UEFA 1", ["UEFA"]),
-    Team("UEFA 2", ["UEFA"]),
-    Team("UEFA 3", ["UEFA"]),
-    Team("UEFA 4", ["UEFA"]),
-    Team("FIFA 1", ["OFC", "CONCACAF", "CAF"]),
-    Team("FIFA 2", ["CONMEBOL", "AFC", "CONCACAF"])
+
+    Team("Italy", ["UEFA"]),
+    Team("Sweden", ["UEFA"]), 
+    Team("Turkey", ["UEFA"]), 
+    Team("Denmark", ["UEFA"]), 
+    Team("DR Congo", ["CAF"]), 
+    Team("Iraq", ["AFC"])
+
+    #Team("UEFA 1", ["UEFA"]),
+    #Team("UEFA 2", ["UEFA"]),
+    #Team("UEFA 3", ["UEFA"]),
+    #Team("UEFA 4", ["UEFA"]),
+    #Team("FIFA 1", ["OFC", "CONCACAF", "CAF"]),
+    #Team("FIFA 2", ["CONMEBOL", "AFC", "CONCACAF"])
 ]
 
 pots = [pot1, pot2, pot3, pot4]

@@ -1,7 +1,7 @@
 from Player import *
 from tirage import *
 
-data = pd.read_csv('tennisATPRanking.csv')
+data = pd.read_csv('football_ranking.csv')
 
 list_players = total_players_list(data)
 

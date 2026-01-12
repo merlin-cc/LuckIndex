@@ -12,6 +12,13 @@ from draw_2026_WC import *
 ###---------Objectif du code---------###
 ### Faire tourner de nombreuses simulations de sorte a créer le luck index ###
 
+def draw_to_teams(draw, list_teams):
+    teams_index = total_teams_index(list_teams) 
+    res = {}
+    for pot in draw:
+        res[pot] = [teams_index[name] for name in draw[pot]]
+
+    return res
 
 
 def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[FootTeam, (float, float)]:
@@ -22,7 +29,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
         if i % 100 == 0 and i > 0:
             print(f"Completed {i} simulations...")
         
-        draw = single_draw(pots)
+        draw = draw_to_teams(single_draw(pots),  list_teams)
 
         for pool in draw:
             for team in draw[pool]:
@@ -44,7 +51,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[F
 
 def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, (float, float)], draw : dict[FootTeam, list[FootTeam]]) -> dict[FootTeam, float]:
     luck_index = {}
-    real_draw = single_draw(pots)
+    real_draw = draw_to_teams(single_draw(pots),  list_teams)
 
     for pool in real_draw:
             for team in real_draw[pool]:
@@ -54,9 +61,8 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[FootTeam, 
                         elo += opponent.elo
                 average_opponent_elo = elo/(len(real_draw[pool])-1)
 
-            mu, sigma = distributions[team]
-
-            luck_index[team] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
+                mu, sigma = distributions[team]
+                luck_index[team] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
 
     # trie des joueurs
     sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
