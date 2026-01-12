@@ -37,7 +37,7 @@ def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[s
                 for opponent in draw[pool]:
                     if opponent != team:
                         strenght += opponent.elo
-                opponent_strength_dist[team.name].append(strenght)
+                opponent_strength_dist[team.name].append(strenght/(len(draw[pool])-1))
 
     distributions = {}
     for team in opponent_strength_dist:
