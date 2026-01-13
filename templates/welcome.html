@@ -33,6 +33,7 @@
             display: block;
         }
 
+
         /* Style de la barre d'onglets */
         .tabs-header {
             display: flex;
@@ -68,9 +69,6 @@
             border-color: #3498db;
         }
 
-        .radio-group {
-            display: inline-block;
-        }
     </style>
   </head>
   <body>
@@ -84,8 +82,8 @@
 
         <div class="content-card">
             
-            <input type="radio" name="sport_toggle" id="tab-tennis" class="tab-switch" checked>
-            <input type="radio" name="sport_toggle" id="tab-football" class="tab-switch">
+            <input type="radio" name="sport_toggle" id="tab-tennis" class="tab-switch" {{ 'checked' if active_tab == 'tennis' }}>
+            <input type="radio" name="sport_toggle" id="tab-football" class="tab-switch" {{ 'checked' if active_tab == 'football' }}>
 
             <div class="tabs-header">
                 <label for="tab-tennis" class="tab-label">Tennis</label>
@@ -93,10 +91,10 @@
             </div>
 
             <div id="content-tennis" class="tab-content">
-                          <div class="info-box">
-            <h3> Qu'est-ce que le Luck Index ?</h3>
-            <p class="definition-text">
-                C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à des milliers de tirages aléatoires.
+                <div class="info-box">
+                    <h3> Qu'est-ce que le Luck Index ?</h3>
+                    <p class="definition-text">
+                    C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à des milliers de tirages aléatoires.
                 <br>
                 <em>« Est-ce que ce joueur a un parcours plus facile ou plus difficile que la moyenne ? »</em>
             </p>
@@ -123,8 +121,8 @@
                   <p class="desc"><strong>Nous vous proposons de calculer le luck index de joueur de tennis au tournoi Roland Garros, leur niveau étant évalué par le classement ATP.</strong></p>
                   <p class="desc"><strong>Vous pouvez :</strong></p>
                   <ul class="desc">
-                    <li><strong>Générer un tirage aléatoire et afficher le luck index de 9 joueurs au hasard [Mode « Aléatoire »]</strong></li>
-                    <li><strong>Créer votre propre pool de 4 joueurs pour voir a quels joueurs profite (ou non) un tirage donné [Mode « Manuel »]</strong></li>
+                    <li><strong>Générer un tirage aléatoire et afficher le luck index de 9 joueurs au hasard, sélectionnez le Mode « Aléatoire »</strong></li>
+                    <li><strong>Créer votre propre pool de 4 joueurs pour voir a quels joueurs profite (ou non) un tirage donné, sélectionnez le Mode « Manuel »</strong></li>
                   </ul>
                 </div>
             </div>
@@ -137,32 +135,33 @@
                     <div class="settings-grid">
                         <div class="form-group">
                             <label for="nb_sim">Nombre de simulations</label>
-                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(100) }}" min="10" class="form-control">
+                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(1000) }}" min="10" class="form-control">
                         </div>
                     </div>
-
-                    <label>Mode de calcul :</label>
-                    <input type="radio" id="choix_aleatoire" name="mode_jeu" value="Aléatoire" checked>
-                    <label for="choix_aleatoire">Aléatoire</label>
+                    <div class = "mode-selector">
+                        <label>Mode de calcul :</label>
+                        <input type="radio" id="choix_aleatoire" name="mode_jeu" value="Aléatoire" checked>
+                        <label for="choix_aleatoire">Aléatoire</label>
                     
-                    <input type="radio" id="choix_manuel" name="mode_jeu" value="Manuel">
-                    <label for="choix_manuel">Manuel</label>
-
-                    <div id="container-joueurs">
-                        <hr class="divider">
-                        <div class="section-title">Sélection Manuelle</div>
-                        <div class="players-grid">
-                            {% for i in range(1, 5) %}
-                            <div class="player-card">
-                                <label for="j{{i}}" class="player-label">Joueur {{i}}</label>
-                                <select id="j{{i}}" name="joueur{{i}}" class="form-control">
-                                    <option value="" disabled selected>-- Choisir --</option>
-                                    {% for joueur in joueurs %}
-                                    <option value="{{ joueur }}">{{ joueur }}</option>
-                                    {% endfor %}
-                                </select>
+                        <input type="radio" id="choix_manuel" name="mode_jeu" value="Manuel">
+                        <label for="choix_manuel">Manuel</label>
+                
+                        <div id="container-joueurs">
+                            <hr class="divider">
+                            <div class="section-title">Sélection Manuelle</div>
+                            <div class="players-grid">
+                                {% for i in range(1, 5) %}
+                                <div class="player-card">
+                                    <label for="j{{i}}" class="player-label">Joueur {{i}}</label>
+                                    <select id="j{{i}}" name="joueur{{i}}" class="form-control">
+                                        <option value="" disabled selected>-- Choisir --</option>
+                                        {% for joueur in joueurs %}
+                                        <option value="{{ joueur }}">{{ joueur }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
 
@@ -170,6 +169,15 @@
                         <button type="submit" class="btn-primary">Lancer le calcul</button>
                     </div>
                 </form>
+
+                {% if plot_url and active_tab == 'tennis' %}
+                <div class="content-card result-card">
+                    <h2>Résultats Tennis</h2>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ plot_url }}" alt="Courbe Tennis">
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
             <div id="content-football" class="tab-content">
@@ -183,35 +191,65 @@
                 <form method="POST">
                     <input type="hidden" name="sport" value="football">
                     
-                    <div class="section-title">Paramètres</div>
+                    <div class="section-title">Paramètres Football</div>
                     <div class="settings-grid">
                         <div class="form-group">
                             <label for="nb_sim_foot">Nombre de simulations</label>
-                            <input type="number" id="nb_sim_foot" name="nombre_simulations" value="100" min="10" class="form-control">
+                            <input type="number" id="nb_sim_foot" name="nombre_simulations" value="10" min="10" class="form-control">
                         </div>
                     </div>
-
-                    <div class="action-area">
-                        <button type="submit" class="btn-primary" style="background-color: #3498db;">Lancer le calcul</button>
+                
+                    <div class="mode-selector">
+                        <label>Mode de calcul :</label><br>
+                        <input type="radio" id="foot_aleatoire" name="mode_jeu_foot" value="Aléatoire" checked>
+                        <label for="foot_aleatoire">Aléatoire</label>
+                        
+                        <input type="radio" id="foot_team" name="mode_jeu_foot" value="Team of interest">
+                        <label for="foot_team">Équipe précise</label>
+                
+                        <input type="radio" id="foot_pot" name="mode_jeu_foot" value="Pot of interest">
+                        <label for="foot_pot">Par Chapeau</label>
+                
+                        <div id="container-team">
+                            <hr class="divider">
+                            <div class="section-title">Sélection Manuelle</div>
+                                <div class="team-card">
+                                    <label for="t{{i}}" class="team-label">Team {{i}}</label>
+                                    <select id="t{{i}}" name="team_of_interest" class="form-control">
+                                        <option value="" disabled selected>-- Choisir --</option>
+                                        {% for team in teams %}
+                                        <option value="{{ team }}">{{ team }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                    
+                        <div id="container-pot-interest" class="conditional-field">
+                            <hr class="divider">
+                            <label class="player-label">Choisir le Chapeau :</label>
+                            <select name="pot_of_interest" class="form-control">
+                                <option value="0">Chapeau 1 (Têtes de série)</option>
+                                <option value="1">Chapeau 2</option>
+                                <option value="2">Chapeau 3</option>
+                                <option value="3">Chapeau 4</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="action-area" style="margin-top: 20px;">
+                        <button type="submit" class="btn-primary" style="background-color: #3498db;">Lancer l'analyse CDM 2026</button>
                     </div>
                 </form>
-            </div>
-        </div>
 
-        {% if err %}
-        <div class="content-card result-card">
-            <h2 style="color: #e74c3c;">{{ err }}</h2>
-        </div>
-        {% endif %}
-
-        {% if plot_url %}
-        <div class="content-card result-card">
-            <h2>Résultats de l'analyse</h2>
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ plot_url }}" alt="Graphique de résultats">
+                {% if plot_url and active_tab == 'football' %}
+                <div class="content-card result-card">
+                    <h2>Résultats Football</h2>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ plot_url }}" alt="Courbe Football">
+                    </div>
+                </div>
+                {% endif %}
             </div>
-        </div>
-        {% endif %}
         
         <footer class="site-footer">
             <p>Développé par Antoine CHEDID & Merlin CONDE-CHERUBIN</p>

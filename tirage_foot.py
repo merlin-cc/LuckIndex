@@ -12,6 +12,19 @@ from draw_2026_WC import *
 ###---------Objectif du code---------###
 ### Faire tourner de nombreuses simulations de sorte a créer le luck index ###
 
+
+
+def get_teams_name(data : pd.DataFrame) -> list[str]:
+    """
+    Returns a list with the names of all the players
+    """
+    teams_list_ = teams_list(data)
+    list_name = []
+    for team in teams_list_:
+        list_name.append(team.name)
+    return list_name
+
+
 def draw_to_teams(draw, list_teams):
     teams_index = total_teams_index(list_teams) 
     res = {}
@@ -21,7 +34,7 @@ def draw_to_teams(draw, list_teams):
     return res
 
 
-def run_simulation(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, (float, float)]:
+def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, (float, float)]:
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -106,7 +119,7 @@ def display_random_foot(distributions : dict[str, (float, float)], luckIndex : d
     teams = list(distributions.keys())
     rd.shuffle(teams)
     fig, axes = plt.subplots(N, N, figsize=(15, 7))
-    fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
+    fig.suptitle(f'{N*N} tirages aléatoires d\'équipes (avec {num_simulations} simulations)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
     for i, ax in enumerate(axes.flat):
@@ -116,3 +129,38 @@ def display_random_foot(distributions : dict[str, (float, float)], luckIndex : d
             ax.set_xticks([])
             ax.set_yticks([])
             display_luck_index_foot(distributions, luckIndex, team)
+
+import math
+
+def display_pot_luck(distributions, luckIndex, pot, pot_idx):
+    """
+    Affiche une grille de graphiques représentant le Luck Index 
+    pour toutes les équipes d'un pot spécifique.
+    """
+    num_teams = len(pot[pot_idx])
+    # Calcul automatique de la grille (ex: 12 équipes -> 3 lignes, 4 colonnes)
+    cols = 4
+    rows = math.ceil(num_teams / cols)
+    
+    fig, axes = plt.subplots(rows, cols, figsize=(18, rows * 3.5))
+    fig.suptitle(f'Analyse du Luck Index du pot - {pot_idx}', fontsize=20, fontweight='bold', y=0.95)
+    
+    plt.subplots_adjust(hspace=0.6, wspace=0.3)
+    
+    # On aplatit les axes pour itérer facilement dessus
+    axes_flat = axes.flatten()
+    
+    for i, team_obj in enumerate(pot):
+        ax = axes_flat[i]
+        plt.axes(ax) # Définit l'axe courant pour display_luck_index_foot
+        
+        team_name = team_obj.name
+        if team_name in distributions:
+            display_luck_index_foot(distributions, luckIndex, team_name)
+        else:
+            ax.set_title(f"{team_name} (No data)")
+            ax.axis('off')
+
+    # Cacher les axes vides si le pot n'est pas un multiple de 4
+    for j in range(i + 1, len(axes_flat)):
+        axes_flat[j].axis('off')

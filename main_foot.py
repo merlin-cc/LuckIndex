@@ -7,9 +7,12 @@ list_teams = teams_list(data)
 
 n_sim = 3
 
-distributions = run_simulation(list_teams, n_sim)
+distributions = run_simulation_foot(list_teams, n_sim)
 real_draw = single_draw(pots)
 luckIndex = luck_index_foot(list_teams, distributions, real_draw)
+
+teams_name = get_teams_name(data)
+print(teams_name)
 
 display_random_foot(distributions, luckIndex, 3, n_sim)
 plt.show()
