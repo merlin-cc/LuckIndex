@@ -1,6 +1,8 @@
 /* --- RESET ET BASE --- */
 :root {
     --primary-color: #2c3e50;    /* Bleu nuit */
+    --tennis-color: #27ae60;     /* Vert Court */
+    --football-color: #3498db;   /* Bleu Sport */
     --accent-color: #d35400;     /* Orange Terre Battue */
     --bg-color: #f0f2f5;         /* Gris clair fond */
     --card-bg: #ffffff;
@@ -181,3 +183,35 @@ body {
     margin-top: 40px;
     padding-bottom: 20px;
 }
+
+/* --- LOGIQUE FOOTBALL (CHAMPS CONDITIONNELS) --- */
+
+/* On cache les conteneurs par défaut */
+.conditional-field {
+    display: none;
+    margin-top: 15px;
+}
+
+/* Si le bouton radio est coché, on affiche la div qui suit dans le même parent */
+#foot_team:checked ~ #container-team-interest {
+    display: block;
+}
+
+#foot_pot:checked ~ #container-pot-interest {
+    display: block;
+}
+
+/* Style spécifique pour les boutons radio de mode */
+.mode-selector {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.mode-selector label {
+    margin-right: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+

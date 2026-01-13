@@ -2,6 +2,8 @@ import random
 import pulp
 from dataclasses import dataclass
 from typing import List, Dict
+import pandas as pd
+
 
 ###----------Objectif du code----------###
 ### Renvoie un dictionnaire {Pool X: [TEAM1, TEAM2, TEAM3, TEAM4]} ###
@@ -13,6 +15,8 @@ class Team:
 
 n = 48
 nb_groups = 12
+
+
 
 pot1 = [
     Team("Mexico", ["CONCACAF"]),
