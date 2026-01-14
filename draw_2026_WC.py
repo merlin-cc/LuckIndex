@@ -154,7 +154,7 @@ def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, engl
     model.solve(pulp.PULP_CBC_CMD(msg=0))
     return pulp.LpStatus[model.status] == 'Optimal'
 
-def single_draw(pots) -> Dict[str, List[str]]:
+def single_draw(pots) -> dict[str, list[str]]:
     assigned = [[0] * n for _ in range(nb_groups)]
     shuffled_indices = []
     for p_idx in range(len(pots)):

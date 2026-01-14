@@ -26,7 +26,7 @@ def get_teams_name(data : pd.DataFrame) -> list[str]:
     return list_name
 
 
-def draw_to_teams(draw, list_teams):
+def draw_to_teams(draw : dict[str, list[str]], list_teams: list[FootTeam]) -> dict[str, list[FootTeam]]:
     teams_index = total_teams_index(list_teams) 
     res = {}
     for pot in draw:
@@ -35,7 +35,7 @@ def draw_to_teams(draw, list_teams):
     return res
 
 
-def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, (float, float)]:
+def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, gaussian_kde]:
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -63,7 +63,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 
 # Calcul du luck index
 
-def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (float, float)], draw) -> dict[str, (float,float)]:
+def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gaussian_kde], draw: dict[str, list[str]]) -> dict[str, (float,float)]:
     luck_index = {}
     real_draw = draw_to_teams(draw,  list_teams)
 
@@ -76,18 +76,6 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (floa
                 average_opponent_elo = elo/(len(real_draw[pool])-1)
                 
                 luck_index[team.name] = (average_opponent_elo, 1-distributions[team.name].integrate_box_1d(0, average_opponent_elo))
-
-    # trie des joueurs
-    """
-    sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
-    print("\n--- Top 5 des teams les plus 'malchanceux' (adversaire le plus fort) ---")
-    for team, luck in sorted_by_luck[:5]:
-        print(f"{team.name}: {luck:.2f} luck index")
-
-    print("\n--- Top 5 des teams les plus 'chanceux' (adversaire le plus faible) ---")
-    for team, luck in sorted_by_luck[-5:]:
-        print(f"{team.name}: {luck:.2f} luck index")
-        """
     
     return luck_index
 
