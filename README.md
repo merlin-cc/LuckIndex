@@ -28,10 +28,10 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - heritage
 - adapter les fonctions de tirage.py
 
-- si on ne choisi pas les joueurs dans le manual
+- si on ne choisi pas les joueurs dans le manual  OK
 - ajouter les signatures des fonctions
 - plot le tirage
-- mettre uniquement les pays particpant a la cdm dans les options lors de 'choisir l'equipe'
+- mettre uniquement les pays particpant a la cdm dans les options lors de 'choisir l'equipe' OK
 - enregister les distributions de foot et juste les exploiter, les faire en live est bcp trop long
 
 - essayer d'avoir un api atp

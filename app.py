@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request
-from Player import *
 from tirage import *
-from Team import *
 from tirage_foot import *
-from draw_2026_WC import *
 import matplotlib
 matplotlib.use('Agg')
 import io
@@ -11,16 +8,19 @@ import base64
 
 ######-----------Logique python---------------######
 
-data_tennis = pd.read_csv('tennisATPRanking.csv')
 
+##TENNIS
+data_tennis = pd.read_csv('tennisATPRanking.csv')
 list_players = total_players_list(data_tennis)
 players_name = get_players_name(data_tennis)
 index_players = total_players_index(list_players)
 players_name.sort()
 
+## FOOTBALL
+teams_name = [team.name for team in all_teams]
 data_foot = pd.read_csv('football_ranking.csv')
+data_foot = data_foot[data_foot['Team'].isin(teams_name)].reset_index(drop=True)
 list_teams = teams_list(data_foot)
-teams_name = get_teams_name(data_foot)
 ######-----------Définition de l'app---------------######
 
 app = Flask (__name__)

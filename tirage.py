@@ -2,7 +2,7 @@ import random as rd
 from collections import defaultdict
 from scipy.stats import norm
 from scipy.integrate import quad
-from Player import TennisPlayer
+from Player import *
 import matplotlib.pyplot as plt
 import numpy as np
 
