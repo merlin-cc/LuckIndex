@@ -2,7 +2,7 @@ import random as rd
 from collections import defaultdict
 from scipy.stats import norm
 from scipy.integrate import quad
-from Player import TennisPlayer
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 from Team import *
@@ -164,3 +164,42 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
     # Cacher les axes vides si le pot n'est pas un multiple de 4
     for j in range(i + 1, len(axes_flat)):
         axes_flat[j].axis('off')
+
+def display_draw(draw):
+    fig, axes = plt.subplots(3, 4, figsize=(18, 10))
+    bg_color = '#0e1a5a'
+    fig.patch.set_facecolor(bg_color)
+    axes = axes.flatten()
+
+    box_color = "white"
+    team_text_color = "#0e1a5a"
+    header_color = "#49afff"
+
+    for i, (poule_name, teams) in enumerate(draw.items()):
+        ax = axes[i]
+        ax.set_facecolor(bg_color)
+        
+
+        ax.text(0.5, 0.95, poule_name.upper(), color=header_color, 
+                fontsize=12, fontweight='black', ha='center', transform=ax.transAxes)
+
+        y_starts = [0.75, 0.53, 0.31, 0.09]
+        
+        for y, team in zip(y_starts, teams):
+            rect = patches.FancyBboxPatch(
+                (0.05, y), 0.9, 0.16, 
+                boxstyle="round,pad=0.01", 
+                edgecolor="none", facecolor=box_color,
+                transform=ax.transAxes
+            )
+            ax.add_patch(rect)
+            
+            ax.text(0.5, y + 0.08, team.upper(), 
+                    color=team_text_color, fontweight='bold', 
+                    fontsize=10, ha='center', va='center', 
+                    transform=ax.transAxes)
+
+        ax.axis('off')
+
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.05, wspace=0.3, hspace=0.4)
+    plt.suptitle("OFFICIAL DRAW - WORLD CUP", color='white', fontsize=22, fontweight='bold', y=0.98)

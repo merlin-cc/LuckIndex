@@ -27,6 +27,7 @@ app = Flask (__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def welcome():
+    image_draw = None
     image_a_afficher = None
     error = None
     n = 1000
@@ -96,11 +97,19 @@ def welcome():
                     image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
 
         elif sport == "football":
+            image_draw = None
             choix_menu_foot = request.form.get('mode_jeu_foot')
 
             distributions_foot = run_simulation_foot(list_teams, n)
             real_draw = single_draw(pots)
             luckIndex = luck_index_foot(list_teams, distributions_foot, real_draw)
+
+            display_draw(real_draw)
+            img0 = io.BytesIO()
+            plt.savefig(img0, format='png', bbox_inches='tight')
+            img0.seek(0)
+            plt.close()
+            image_draw = base64.b64encode(img0.getvalue()).decode('utf8')
         
             if choix_menu_foot == "Aléatoire" :
                 display_random_foot(distributions_foot, luckIndex, 3, n)
@@ -121,7 +130,7 @@ def welcome():
 
 
 
-    return render_template("welcome.html", plot_url=image_a_afficher, active_tab=active_tab, joueurs = players_name, teams = teams_name, valeue_n = n, err = error)
+    return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab, joueurs = players_name, teams = teams_name, valeue_n = n, err = error)
 
 
 
