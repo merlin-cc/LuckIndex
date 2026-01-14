@@ -1,6 +1,7 @@
 import random as rd
 from collections import defaultdict
 from scipy.stats import norm
+from scipy.stats import gaussian_kde
 from scipy.integrate import quad
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -54,7 +55,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 
     distributions = {}
     for team in opponent_strength_dist:
-        distributions[team] = norm.fit(opponent_strength_dist[team]) #mu and sigma of normal distibution
+        distributions[team] = gaussian_kde(opponent_strength_dist[team]) #kde
     
     print("Simulation complete.")
     return distributions
@@ -62,7 +63,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 
 # Calcul du luck index
 
-def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (float, float)], draw) -> dict[str, float]:
+def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (float, float)], draw) -> dict[str, (float,float)]:
     luck_index = {}
     real_draw = draw_to_teams(draw,  list_teams)
 
@@ -73,9 +74,8 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (floa
                     if opponent != team:
                         elo += opponent.elo
                 average_opponent_elo = elo/(len(real_draw[pool])-1)
-
-                mu, sigma = distributions[team.name]
-                luck_index[team.name] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, average_opponent_elo)[0]
+                
+                luck_index[team.name] = (average_opponent_elo, 1-distributions[team.name].integrate_box_1d(0, average_opponent_elo))
 
     # trie des joueurs
     """
@@ -92,43 +92,42 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, (floa
     return luck_index
 
 
-def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, float], team: str) -> None:
-    mu, sigma = distributions[team]
+def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, float], team: str, x : list[float]) -> None:
+    dist = distributions[team]
 
-    x_min = mu - 5 * sigma
-    x_max = mu + 5 * sigma
+    y = dist(x)
+    plt.plot(x, y, color='royalblue', linewidth=2.5)
 
-    val_calculee = norm.ppf(1 - luckIndex[team], loc=mu, scale=sigma)
-    X = np.linspace(x_min, x_max, 1000)
-    Y = norm.pdf(X, mu, sigma)
+    plt.axvline(x=np.mean(dist.dataset), color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
+    plt.axvline(x=luckIndex[team][0], color='black', linewidth=2.5)
 
-    plt.plot(X, Y, color='royalblue', linewidth=2.5)
-
-    plt.axvline(x=mu, color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
-    plt.axvline(x=val_calculee, color='black', linewidth=2.5)
-
-    plt.xlabel(f"{team}\nLuck index = {100*luckIndex[team]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+    plt.xlabel(f"{team}\nLuck index = {100*luckIndex[team][1]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
 
     plt.title("")
     plt.xticks([])
     plt.yticks([])
-    plt.ylim(0, Y.max() * 1.1)
-    plt.xlim(x_min, x_max)
+    plt.ylim(0, y.max() * 1.1)
+    plt.xlim(x[0], x[-1])
 
 def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, float], N : int, num_simulations : int) -> None:
     teams = list(distributions.keys())
     rd.shuffle(teams)
+    displayed_teams = teams[:N*N]
+    dists = [distributions[team] for team in displayed_teams]
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
+    x = np.linspace(xmin, xmax, 10000)
     fig, axes = plt.subplots(N, N, figsize=(15, 7))
     fig.suptitle(f'{N*N} tirages aléatoires d\'équipes (avec {num_simulations} simulations)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
     for i, ax in enumerate(axes.flat):
-        if i < len(teams) and i < N*N:
-            team = teams[i]
+        if i < len(displayed_teams):
+            team = displayed_teams[i]
             plt.axes(ax)
             ax.set_xticks([])
             ax.set_yticks([])
-            display_luck_index_foot(distributions, luckIndex, team)
+            display_luck_index_foot(distributions, luckIndex, team, x)
 
 import math
 
