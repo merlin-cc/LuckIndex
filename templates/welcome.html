@@ -16,7 +16,13 @@
             display: block;
         }
 
-        /* --- LOGIQUE DES ONGLETS SANS JAVASCRIPT --- */
+        #container-team {
+            display: none;
+        }
+        #foot_team:checked ~ #container-team {
+            display: block;
+        }
+
         /* On cache les boutons radio qui servent de commutateurs d'onglets */
         .tab-switch {
             display: none;
