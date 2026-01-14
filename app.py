@@ -107,10 +107,7 @@ def welcome():
                 
             elif choix_menu_foot == "Team of interest":
                 team_name = str(request.form.get('team_of_interest'))
-                if team_name.strip() in distributions_foot:
-                    display_luck_index_foot(distributions_foot, luckIndex, team_name.strip())
-                else :
-                    print("ca flop")
+                display_luck_index_foot(distributions_foot, luckIndex, team_name.strip())
 
             elif choix_menu_foot == "Pot of interest":
                 pot_idx = int(request.form.get('pot_of_interest'))
