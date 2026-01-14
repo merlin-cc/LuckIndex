@@ -10,5 +10,3 @@ real_draw = createDraws(list_players)
 luckIndex = luck_index(list_players, distributions, real_draw)
 
 display_random(distributions, luckIndex, list_players, 3)
-
-
