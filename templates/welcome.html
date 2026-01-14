@@ -169,6 +169,12 @@
                         <button type="submit" class="btn-primary">Lancer le calcul</button>
                     </div>
                 </form>
+                
+                {% if err and active_tab =='tennis' %}
+                <div class="content-card result-card">
+                    <h2>{{ err }}</h2>
+                </div>
+                {% endif %}
 
                 {% if plot_url and active_tab == 'tennis' %}
                 <div class="content-card result-card">

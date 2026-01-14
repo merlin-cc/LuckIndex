@@ -61,34 +61,39 @@ def welcome():
                 image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
             
             elif choix_menu == "Manuel":
-                j1_name = str(request.form.get('joueur1'))
-                j2_name = str(request.form.get('joueur2'))
-                j3_name = str(request.form.get('joueur3'))
-                j4_name = str(request.form.get('joueur4'))
-
-                p1 = index_players[j1_name]
-                p2 = index_players[j2_name]
-                p3 = index_players[j3_name]
-                p4 = index_players[j4_name]
-
                 try:
+                    j1_name = str(request.form.get('joueur1'))
+                    j2_name = str(request.form.get('joueur2'))
+                    j3_name = str(request.form.get('joueur3'))
+                    j4_name = str(request.form.get('joueur4'))
+
+                    p1 = index_players[j1_name]
+                    p2 = index_players[j2_name]
+                    p3 = index_players[j3_name]
+                    p4 = index_players[j4_name]
+
+                    
                     if (p1 == p2 or p1 == p3 or p1 == p4 or p2 == p3 or p2 == p4 or p3 == p4):
                         raise (SamePlayersError)
+
                     
-                    else:
-                        manual_tirage([p1,p2,p3,p4], distributions, n)
-                        img = io.BytesIO()
-                        plt.savefig(img, format='png', bbox_inches='tight')
-                        img.seek(0) # Revenir au début du fichier virtuel
-                        plt.close()
-
-                        image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
-
                 except SamePlayersError as e:
                     error = e.msg
 
-                except : 
+                except KeyError:
+                    error = "Veuillez sélectionner 4 joueurs."
+
+                except  : 
                     error = "Une erreur est survenue"
+
+                else:
+                    manual_tirage([p1,p2,p3,p4], distributions, n)
+                    img = io.BytesIO()
+                    plt.savefig(img, format='png', bbox_inches='tight')
+                    img.seek(0) # Revenir au début du fichier virtuel
+                    plt.close()
+
+                    image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
 
         elif sport == "football":
             choix_menu_foot = request.form.get('mode_jeu_foot')
