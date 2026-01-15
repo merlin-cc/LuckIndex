@@ -86,6 +86,24 @@ pot4 = [
     #Team("FIFA 2", ["CONMEBOL", "AFC", "CONCACAF"])
 ]
 
+
+
+##### ----- OFFICIAL DRAW ----- #####
+#traiter les UEFA (pas indiqués comme il faut sur le dict + calculer les histoires de adversaire possible.)
+official_draw = {
+    'Poule A': ['Mexico', 'South Africa', 'South Korea', 'Winner Play-off D (CZE/DEN/IRL/MKD)'],
+    'Poule B': ['Canada', 'Winner Play-off A (BIH/ITA/NIR/WAL)', 'Qatar', 'Switzerland'],
+    'Poule C': ['Brazil', 'Morocco', 'Haiti', 'Scotland'],
+    'Poule D': ['USA', 'Paraguay', 'Australia', 'Winner Play-off C (KOS/ROU/SVK/TUR)'],
+    'Poule E': ['Germany', 'Curaçao', 'Ivory Coast', 'Ecuador'],
+    'Poule F': ['Netherlands', 'Japan', 'Winner Play-off B (ALB/POL/SWE/UKR)', 'Tunisia'],
+    'Poule G': ['Belgium', 'Egypt', 'IR Iran', 'New Zealand'],
+    'Poule H': ['Spain', 'Cape Verde', 'Saudi Arabia', 'Uruguay'],
+    'Poule I': ['France', 'Senegal', 'Winner Play-off 2 (BOL/IRQ/SUR)', 'Norway'],
+    'Poule J': ['Argentina', 'Algeria', 'Austria', 'Jordan'],
+    'Poule K': ['Portugal', 'Winner Play-off 1 (COD/JAM/NCL)', 'Uzbekistan', 'Colombia'],
+    'Poule L': ['England', 'Croatia', 'Ghana', 'Panama']}
+#---------------------
 pots = [pot1, pot2, pot3, pot4]
 all_teams = [team for pot in pots for team in pot]
 
@@ -198,3 +216,5 @@ def single_draw(pots) -> dict[str, list[str]]:
 if __name__ == "__main__":
     pousles_dict = single_draw(pots)
     print(pousles_dict)
+
+

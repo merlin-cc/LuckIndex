@@ -33,7 +33,7 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - plot le tirage
 - mettre uniquement les pays particpant a la cdm dans les options lors de 'choisir l'equipe' OK
 - enregister les distributions de foot et juste les exploiter, les faire en live est bcp trop long
-
+- pour le tirage officiel : #traiter les UEFA (pas indiqués comme il faut sur le dict + calculer les histoires de adversaire possible.) [dans draw_2026_WC]
 - essayer d'avoir un api atp
 
 
