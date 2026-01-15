@@ -58,7 +58,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
         distributions[team] = gaussian_kde(opponent_strength_dist[team]) #kde
     
     print("Simulation complete.")
-    return distributions
+    return distributions #, opponent_strength_dist (à mettre quand on stockera N simulations dans un fichier (au cas où))
 
 
 # Calcul du luck index
@@ -80,7 +80,7 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gauss
     return luck_index
 
 
-def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, float], team: str, x : list[float]) -> None:
+def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, (float,float)], team: str, x : list[float]) -> None:
     dist = distributions[team]
 
     y = dist(x)
@@ -97,7 +97,7 @@ def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex:
     plt.ylim(0, y.max() * 1.1)
     plt.xlim(x[0], x[-1])
 
-def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, float], N : int, num_simulations : int) -> None:
+def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, (float,float)], N : int, num_simulations : int) -> None:
     teams = list(distributions.keys())
     rd.shuffle(teams)
     displayed_teams = teams[:N*N]
@@ -152,7 +152,7 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
     for j in range(i + 1, len(axes_flat)):
         axes_flat[j].axis('off')
 
-def display_draw(draw):
+def display_draw(draw : dict[str, list[str]]) -> None:
     fig, axes = plt.subplots(3, 4, figsize=(18, 10))
     bg_color = '#0e1a5a'
     fig.patch.set_facecolor(bg_color)
