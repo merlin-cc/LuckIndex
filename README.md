@@ -29,11 +29,14 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - adapter les fonctions de tirage.py
 
 - si on ne choisi pas les joueurs dans le manual  OK
+
+
 - ajouter les signatures des fonctions
-- plot le tirage
+- plot le tirage ok (manque le tennis)
 - mettre uniquement les pays particpant a la cdm dans les options lors de 'choisir l'equipe' OK
 - enregister les distributions de foot et juste les exploiter, les faire en live est bcp trop long
 - pour le tirage officiel : #traiter les UEFA (pas indiqués comme il faut sur le dict + calculer les histoires de adversaire possible.) [dans draw_2026_WC]
 - essayer d'avoir un api atp
-
-
+- version anglais
+- elo != points pour le tennis
+- faire avec le vrai tirage (prednre le classement fifa de fin novemebre au moment du tirage)
