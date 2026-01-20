@@ -5,6 +5,7 @@ from scipy.stats import gaussian_kde
 from scipy.integrate import quad
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 from Team import *
 from draw_2026_WC import *
@@ -103,13 +104,21 @@ def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex:
     plt.axvline(x=np.mean(dist.dataset), color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
     plt.axvline(x=luckIndex[team][0], color='black', linewidth=2.5)
 
-    plt.xlabel(f"{team}\nLuck index = {100*luckIndex[team][1]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+    plt.xlabel(f"{team}\nLuck index = {100*luckIndex[team][1]:.1f}%", fontsize=12, fontweight='bold', labelpad=10)
 
     plt.title("")
     plt.xticks([])
     plt.yticks([])
     plt.ylim(0, y.max() * 1.1)
     plt.xlim(x[0], x[-1])
+
+    ax = plt.gca()
+
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
+    ax.tick_params(axis='x', labelsize=8, color='#888', labelcolor='#666')
+
+    ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='#27ae60', fontsize=8, fontweight='bold', ha='left')
+    ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='#c0392b', fontsize=8, fontweight='bold', ha='right')
 
 def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, (float,float)], N : int, num_simulations : int) -> None:
     """
@@ -134,6 +143,46 @@ def display_random_foot(distributions : dict[str, (float, float)], luckIndex : d
             ax.set_xticks([])
             ax.set_yticks([])
             display_luck_index_foot(distributions, luckIndex, team, x)
+
+
+def display_official_draw_luck(distributions: dict[str, gaussian_kde], luckIndex: dict[str, tuple[float, float]], draw: dict[str, list[str]]) -> None:
+    all_teams_in_draw = [team for group in draw.values() for team in group]
+    relevant_dists = [distributions[t] for t in all_teams_in_draw if t in distributions]
+    
+    if not relevant_dists:
+        return
+
+    xmin = min([np.min(d.dataset) for d in relevant_dists]) - 100
+    xmax = max([np.max(d.dataset) for d in relevant_dists]) + 100
+    x = np.linspace(xmin, xmax, 1000)
+
+    fig, axes = plt.subplots(12, 4, figsize=(24, 40))
+    fig.suptitle("Luck Index - Tirage Officiel Coupe du Monde 2026", fontsize=20, fontweight='bold', y=0.95)
+    
+    plt.subplots_adjust(hspace=0.6, wspace=0.3)
+    
+    group_names = list(draw.keys())
+    
+    for g_idx, group_name in enumerate(group_names):
+        teams = draw[group_name]
+        
+        row = g_idx
+        
+        for t_idx, team_name in enumerate(teams):
+            ax = axes[row, t_idx]
+            
+            plt.axes(ax)
+            
+            if t_idx == 0:
+                ax.text(-0.2, 0.5, group_name, transform=ax.transAxes, 
+                       rotation=90, va='center', ha='right', fontsize=12, fontweight='bold', color='#333')
+
+            if team_name in distributions:
+                display_luck_index_foot(distributions, luckIndex, team_name, x)
+            else:
+                ax.text(0.5, 0.5, f"{team_name}\n(Pas de données)", ha='center', va='center')
+                ax.set_xticks([])
+                ax.set_yticks([])
 
 import math
 

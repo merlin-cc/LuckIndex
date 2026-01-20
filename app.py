@@ -24,22 +24,17 @@ list_teams = teams_list(data_foot)
 
 def get_distributions_foot_optimized(list_teams, n_input):
     """
-    Charge les distributions depuis le CSV s'il existe,
-    sinon recalcule tout (lent).
+    Loading distributions for football from the csv file to imporve speed computation
     """
     csv_path = 'simulations_distrib_foot.csv'
     
     if os.path.exists(csv_path):
         print("Chargement des simulations depuis le CSV (rapide)...")
         try:
-            # 1. Lire le CSV
             df = pd.read_csv(csv_path)
-            
-            # 2. Reconstruire les KDE pour chaque équipe
             distributions = {}
-            # df.columns contient les noms des équipes
+
             for team_name in df.columns:
-                # On recrée l'objet gaussian_kde à partir des colonnes du CSV
                 distributions[team_name] = gaussian_kde(df[team_name].values)
             
             print("Distributions reconstruites avec succès !")
@@ -49,7 +44,6 @@ def get_distributions_foot_optimized(list_teams, n_input):
             print(f"Erreur lors de la lecture du CSV : {e}")
             print("Retour au calcul manuel...")
 
-    # Si pas de CSV ou erreur, on fait la méthode lente
     print(f"Calcul en direct ({n_input} simulations)...")
     return run_simulation_foot(list_teams, n_input)
 
@@ -150,7 +144,7 @@ def welcome():
             image_draw = base64.b64encode(img0.getvalue()).decode('utf8')
 
             if choix_menu_foot == "Official Draw":
-                display_random_foot(distributions_foot, luckIndex, 7, n)
+                display_official_draw_luck(distributions_foot, luckIndex, real_draw)
         
             if choix_menu_foot == "Aléatoire" :
                 display_random_foot(distributions_foot, luckIndex, 3, n)

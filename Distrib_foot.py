@@ -9,8 +9,9 @@ def generate_simulation_data():
     data = pd.read_csv('football_ranking.csv')
     teams_list_obj = teams_list(data) 
 
-    print("Lancement de la simulation lourde (100 itérations)...")
-    distributions = run_simulation_foot(teams_list_obj, num_simulations=100)
+    num_simulations = 1000
+    print(f"Lancement de la simulation lourde ('{num_simulations}' itérations)...")
+    distributions = run_simulation_foot(teams_list_obj, num_simulations)
 
     print("Extraction des données brutes...")
     raw_data = {}

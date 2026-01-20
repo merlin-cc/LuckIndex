@@ -1,5 +1,6 @@
 import random as rd
 from collections import defaultdict
+import matplotlib.ticker as ticker
 from scipy.stats import norm
 from scipy.integrate import quad
 from Player import *
@@ -152,16 +153,24 @@ def display_luck_index(distributions: dict[TennisPlayer, (float, float)], luckIn
 
     plt.plot(x, y, color='royalblue', linewidth=2.5)
 
-    plt.axvline(x=np.mean(dist.dataset), color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
-    plt.axvline(x=luckIndex[player][0], color='black', linewidth=2.5)
+    plt.plot(X, Y, color='forestgreen', linewidth=2.5)
 
-    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player][1]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+    plt.axvline(x=mu, color='green', linestyle=':', linewidth=2.5, alpha=0.8)
+    plt.axvline(x=val_calculee, color='black', linewidth=2.5)
+
+    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player]:.1f}", fontsize=11, fontweight='bold', labelpad=15)
 
     plt.title("")
-    plt.xticks([])
     plt.yticks([])
-    plt.ylim(0, y.max() * 1.1)
-    plt.xlim(x[0], x[-1])
+    plt.ylim(0, Y.max() * 1.1)
+    plt.xlim(x_min, x_max)
+
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
+    ax.tick_params(axis='x', labelsize=8, color='#888', labelcolor='#666')
+
+    ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='#27ae60', fontsize=8, fontweight='bold', ha='left')
+    ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='#c0392b', fontsize=8, fontweight='bold', ha='right')
 
 def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
