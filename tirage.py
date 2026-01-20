@@ -5,6 +5,8 @@ from scipy.integrate import quad
 from Player import *
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.stats import gaussian_kde
+
 
 """
 Here we create random draws that are allowed by Roland Garros rules
@@ -122,7 +124,7 @@ def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> 
 
     distributions = {}
     for player in opponent_strength_dist:
-        distributions[player] = norm.fit(opponent_strength_dist[player]) #mu and sigma of normal distibution
+        distributions[player] =  gaussian_kde(opponent_strength_dist[player])
     
     print("Simulation complete.")
     return distributions
@@ -130,7 +132,7 @@ def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> 
 
 # Calcul du luck index
 
-def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, float]:
+def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPlayer, gaussian_kde], draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, (float, float)]:
     luck_index = {}
     opponents_map = get_opponents_from_draw(draw)
     for player in list_players:
@@ -138,49 +140,37 @@ def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPla
         for opponent in opponents_map[player]:
             avg_opponent_elo += opponent.elo/2
 
-        mu, sigma = distributions[player]
-
-        luck_index[player] = 1-quad(lambda s: norm.pdf(s, mu, sigma), 0, avg_opponent_elo)[0]
-
-    # trie des joueurs
-    sorted_by_luck = sorted(luck_index.items(), key=lambda item: item[1])
-    print("\n--- Top 5 des joueurs les plus 'malchanceux' (adversaire le plus fort) ---")
-    for player, luck in sorted_by_luck[:5]:
-        print(f"{player.name}: {luck:.2f} luck index")
-
-    print("\n--- Top 5 des joueurs les plus 'chanceux' (adversaire le plus faible) ---")
-    for player, luck in sorted_by_luck[-5:]:
-        print(f"{player.name}: {luck:.2f} luck index")
+            luck_index[player] = luck_index[player] = (avg_opponent_elo, 1-distributions[player].integrate_box_1d(0, avg_opponent_elo))
     
     return luck_index
 
 
-def display_luck_index(distributions: dict[TennisPlayer, (float, float)], luckIndex: dict[TennisPlayer, float], player: TennisPlayer) -> None:
-    mu, sigma = distributions[player]
+def display_luck_index(distributions: dict[TennisPlayer, (float, float)], luckIndex: dict[TennisPlayer, (float,float)], player: TennisPlayer, x : list[float]) -> None:
+    dist = distributions[player]
 
-    x_min = mu - 5 * sigma
-    x_max = mu + 5 * sigma
+    y = dist(x)
 
-    val_calculee = norm.ppf(1 - luckIndex[player], loc=mu, scale=sigma)
-    X = np.linspace(x_min, x_max, 1000)
-    Y = norm.pdf(X, mu, sigma)
+    plt.plot(x, y, color='royalblue', linewidth=2.5)
 
-    plt.plot(X, Y, color='royalblue', linewidth=2.5)
+    plt.axvline(x=np.mean(dist.dataset), color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
+    plt.axvline(x=luckIndex[player][0], color='black', linewidth=2.5)
 
-    plt.axvline(x=mu, color='blue', linestyle=':', linewidth=2.5, alpha=0.8)
-    plt.axvline(x=val_calculee, color='black', linewidth=2.5)
-
-    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
+    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player][1]:.1f}", fontsize=12, fontweight='bold', labelpad=10)
 
     plt.title("")
     plt.xticks([])
     plt.yticks([])
-    plt.ylim(0, Y.max() * 1.1)
-    plt.xlim(x_min, x_max)
+    plt.ylim(0, y.max() * 1.1)
+    plt.xlim(x[0], x[-1])
 
 def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
     rd.shuffle(players)
+    displayed_players = players[:N*N]
+    dists = [distributions[team] for team in displayed_players]
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
+    x = np.linspace(xmin, xmax, 10000)
     fig, axes = plt.subplots(N, N, figsize=(15, 7))
     fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
@@ -191,11 +181,15 @@ def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex
             plt.axes(ax)
             ax.set_xticks([])
             ax.set_yticks([])
-            display_luck_index(distributions, luckIndex, player)
+            display_luck_index(distributions, luckIndex, player, x)
 
 def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], num_simulations : int) -> None:
     draw = {players[0] : [players[1], players[2], players[3]]}
     luckIndex = luck_index(players, distributions, draw)
+    dists = [distributions[team] for team in players]
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
+    x = np.linspace(xmin, xmax, 10000)
     fig, axes = plt.subplots(2, 2, figsize=(15, 7))
     fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
@@ -204,4 +198,4 @@ def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlaye
         plt.axes(ax)
         ax.set_xticks([])
         ax.set_yticks([])
-        display_luck_index(distributions, luckIndex, player)
+        display_luck_index(distributions, luckIndex, player, x)
