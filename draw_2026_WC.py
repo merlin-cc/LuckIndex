@@ -208,6 +208,28 @@ def single_draw(pots) -> dict[str, list[str]]:
         result_dict[group_name] = [all_teams[i].name for i in range(n) if assigned[g][i] == 1]
     return result_dict
 
+def get_official_draw_2026() -> dict[str, list[str]]:
+    """
+    Returns the official draw dictionary for WC 2026 with 
+    UEFA A -> Italy; UEFA B -> Sweden
+    UEFA C -> Turkey; UEFA D -> Denmark
+    FIFA A -> DR Congo; FIFA B -> Iraq
+    """
+    official_draw = {
+        "Group A": ["Mexico", "South Africa", "South Korea", "Denmark"],
+        "Group B": ["Canada", "Italy", "Qatar", "Switzerland"],
+        "Group C": ["Brazil", "Morocco", "Haiti", "Scotland"],
+        "Group D": ["United States", "Paraguay", "Australia", "Turkey"],
+        "Group E": ["Germany", "Curaçao", "Ivory Coast", "Ecuador"],
+        "Group F": ["Netherlands", "Japan", "Sweden", "Tunisia"],
+        "Group G": ["Belgium", "Egypt", "Iran", "New Zealand"],
+        "Group H": ["Spain", "Cape Verde", "Saudi Arabia", "Uruguay"],
+        "Group I": ["France", "Senegal", "Iraq", "Norway"],
+        "Group J": ["Argentina", "Algeria", "Austria", "Jordan"],
+        "Group K": ["Portugal", "DR Congo", "Uzbekistan", "Colombia"],
+        "Group L": ["England", "Croatia", "Ghana", "Panama"]
+    }
+    return official_draw
 
 # ------------------------------------------------------------
 # Execution
