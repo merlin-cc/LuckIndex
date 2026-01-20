@@ -4,8 +4,8 @@ from tirage_foot import *
 import matplotlib
 matplotlib.use('Agg')
 import io
+import os
 import base64
-
 ######-----------Logique python---------------######
 
 
@@ -21,6 +21,39 @@ teams_name = [team.name for team in all_teams]
 data_foot = pd.read_csv('football_ranking.csv')
 data_foot = data_foot[data_foot['Team'].isin(teams_name)].reset_index(drop=True)
 list_teams = teams_list(data_foot)
+
+def get_distributions_foot_optimized(list_teams, n_input):
+    """
+    Charge les distributions depuis le CSV s'il existe,
+    sinon recalcule tout (lent).
+    """
+    csv_path = 'simulations_distrib_foot.csv'
+    
+    if os.path.exists(csv_path):
+        print("Chargement des simulations depuis le CSV (rapide)...")
+        try:
+            # 1. Lire le CSV
+            df = pd.read_csv(csv_path)
+            
+            # 2. Reconstruire les KDE pour chaque équipe
+            distributions = {}
+            # df.columns contient les noms des équipes
+            for team_name in df.columns:
+                # On recrée l'objet gaussian_kde à partir des colonnes du CSV
+                distributions[team_name] = gaussian_kde(df[team_name].values)
+            
+            print("Distributions reconstruites avec succès !")
+            return distributions
+            
+        except Exception as e:
+            print(f"Erreur lors de la lecture du CSV : {e}")
+            print("Retour au calcul manuel...")
+
+    # Si pas de CSV ou erreur, on fait la méthode lente
+    print(f"Calcul en direct ({n_input} simulations)...")
+    return run_simulation_foot(list_teams, n_input)
+
+
 ######-----------Définition de l'app---------------######
 
 app = Flask (__name__)
@@ -100,8 +133,13 @@ def welcome():
             image_draw = None
             choix_menu_foot = request.form.get('mode_jeu_foot')
 
-            distributions_foot = run_simulation_foot(list_teams, n)
-            real_draw = single_draw(pots)
+            distributions_foot = get_distributions_foot_optimized(list_teams, n)
+
+            if choix_menu_foot == "Official Draw":
+                real_draw = get_official_draw_2026()
+            else:
+                real_draw = single_draw(pots)
+            
             luckIndex = luck_index_foot(list_teams, distributions_foot, real_draw)
 
             display_draw(real_draw)
@@ -110,6 +148,9 @@ def welcome():
             img0.seek(0)
             plt.close()
             image_draw = base64.b64encode(img0.getvalue()).decode('utf8')
+
+            if choix_menu_foot == "Official Draw":
+                display_random_foot(distributions_foot, luckIndex, 7, n)
         
             if choix_menu_foot == "Aléatoire" :
                 display_random_foot(distributions_foot, luckIndex, 3, n)

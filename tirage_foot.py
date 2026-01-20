@@ -17,7 +17,7 @@ from draw_2026_WC import *
 
 def get_teams_name(data : pd.DataFrame) -> list[str]:
     """
-    Returns a list with the names of all the players
+    Extracts and returns a list containing the names of all teams from the dataframe.
     """
     teams_list_ = teams_list(data)
     list_name = []
@@ -27,15 +27,21 @@ def get_teams_name(data : pd.DataFrame) -> list[str]:
 
 
 def draw_to_teams(draw : dict[str, list[str]], list_teams: list[FootTeam]) -> dict[str, list[FootTeam]]:
+    """
+    Converts a draw dictionary (containing team names) into a dictionary mapping pots to lists of FootTeam objects.
+    """
     teams_index = total_teams_index(list_teams) 
     res = {}
     for pot in draw:
         res[pot] = [teams_index[name] for name in draw[pot]]
-
     return res
 
 
 def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, gaussian_kde]:
+    """
+    Runs a specified number of draw simulations to generate Gaussian KDE distributions 
+    of average opponent strength for each team.
+    """
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -64,6 +70,10 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 # Calcul du luck index
 
 def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gaussian_kde], draw: dict[str, list[str]]) -> dict[str, (float,float)]:
+    """
+    Calculates the Luck Index for each team by comparing their actual draw difficulty 
+    (average opponent Elo) against the simulated probability distributions.
+    """
     luck_index = {}
     real_draw = draw_to_teams(draw,  list_teams)
 
@@ -81,6 +91,10 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gauss
 
 
 def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, (float,float)], team: str, x : list[float]) -> None:
+    """
+    Plots the opponent strength distribution for a specific team, highlighting the 
+    theoretical mean difficulty and the actual draw difficulty (Luck Index).
+    """
     dist = distributions[team]
 
     y = dist(x)
@@ -98,6 +112,10 @@ def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex:
     plt.xlim(x[0], x[-1])
 
 def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, (float,float)], N : int, num_simulations : int) -> None:
+    """
+    Selects N*N random teams and displays their Luck Index plots in a grid layout 
+    to provide a quick overview of different outcomes.
+    """
     teams = list(distributions.keys())
     rd.shuffle(teams)
     displayed_teams = teams[:N*N]
@@ -121,8 +139,7 @@ import math
 
 def display_pot_luck(distributions, luckIndex, pot, pot_idx):
     """
-    Affiche une grille de graphiques représentant le Luck Index 
-    pour toutes les équipes d'un pot spécifique.
+    Displays a grid of Luck Index plots for all teams contained in a specific pot.
     """
     num_teams = len(pot[pot_idx])
     # Calcul automatique de la grille (ex: 12 équipes -> 3 lignes, 4 colonnes)
@@ -153,6 +170,10 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
         axes_flat[j].axis('off')
 
 def display_draw(draw : dict[str, list[str]]) -> None:
+    """
+    Visualizes the official World Cup draw results in a stylized grid format, 
+    displaying groups and their respective teams.
+    """
     fig, axes = plt.subplots(3, 4, figsize=(18, 10))
     bg_color = '#0e1a5a'
     fig.patch.set_facecolor(bg_color)
