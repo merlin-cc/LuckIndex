@@ -194,22 +194,47 @@
 
             <div id="content-football" class="tab-content">
                 <div class="info-box">
-                    <h3> Qu'est-ce que le Luck Index Football ?</h3>
+                    <h3>Qu'est-ce que le Luck Index au Football ?</h3>
+                    
                     <p class="definition-text">
-                        Analyse du tirage des phases de groupes de coupe du monde 2026. 
+                        Le Luck Index mesure la difficulté du groupe d'une équipe, 
+                        <strong>non pas dans l'absolu, mais par rapport à ce qui était mathématiquement possible pour elle.</strong>
                     </p>
+                
+                    <div class="explanation-section">
+                        <h4>Pourquoi c'est important ? (Le biais structurel)</h4>
+                        <p>
+                            Comparer simplement le classement des adversaires est trompeur car <strong>toutes les équipes ne jouent pas au même jeu</strong>. 
+                            Le tirage est intrinsèquement biaisé par :
+                        </p>
+                        <ul class="bias-list">
+                            <li><strong>Les Chapeaux :</strong> Une équipe du Chapeau 4 affrontera obligatoirement des équipes plus fortes qu'elle, alors qu'une tête de série les évitera.</li>
+                            <li><strong>Les Contraintes Géographiques :</strong> Le Brésil ne peut pas jouer contre l'Uruguay, l'Europe est limitée à deux équipes par groupe, etc.</li>
+                        </ul>
+                        <p>
+                            Le Luck Index permet donc de voir si une équipe a un groupe difficile parce qu'elle est <strong>structurellement désavantagée par le système</strong> (Chapeau 4) ou si elle a vraiment était <strong>malchancheuse</strong> au moment du tirage (Hasard pur).
+                        </p>
+                    </div>
+                
+                    <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+                
+                    <div class="interpretation-section">
+                        <h4>Comment lire le score ?</h4>
+                        <ul class="score-list">
+                            <li><span class="badge-luck high">High Luck (~100%)</span> : L'équipe a obtenu l'un des tirages les plus faciles possibles pour son statut.</li>
+                            <li><span class="badge-luck low">Low Luck (~0%)</span> : L'équipe est tombée dans le pire scénario mathématiquement possible ("Groupe de la mort").</li>
+                        </ul>
+                    <div class="hypothesis-section">
+                        <h4>Nous avons fait la supposition suivante (sera màj lorsque l'on aura les résultats)</h4>
+                        <ul class="Hypothesis">
+                            <li><span class="Europe">Les pays européen passant les barrages UEFA sont</span> : l'Italie, la Suède, la Turquie et le Danemark.</li>
+                            <li><span class="badge-luck low">Les pays oassant les barrages FIFA sont</span> : la RDC et l'Irak.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <form method="POST">
                     <input type="hidden" name="sport" value="football">
-                    
-                    <div class="section-title">Paramètres Football</div>
-                    <div class="settings-grid">
-                        <div class="form-group">
-                            <label for="nb_sim_foot">Nombre de simulations</label>
-                            <input type="number" id="nb_sim_foot" name="nombre_simulations" value="10" min="10" class="form-control">
-                        </div>
-                    </div>
                 
                     <div class="mode-selector">
                         <label>Mode d'affichage :</label><br>
