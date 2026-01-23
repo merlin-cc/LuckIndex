@@ -211,3 +211,40 @@ def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlaye
         ax.set_xticks([])
         ax.set_yticks([])
         display_luck_index(distributions, luckIndex, player, x)
+
+def bar_luck_index_tennis(luckIndex):
+    data = {}
+    for player in luckIndex:
+        data[player.name] = 100*luckIndex[player][1]
+    
+    sorted_data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True))
+    players = list(sorted_data.keys())
+    lucks = list(sorted_data.values())
+
+    fig, ax = plt.subplots(figsize=(10, len(players) * 0.25 + 1))
+    
+    ax.barh(range(len(players)), lucks, color='black', height=0.7)
+    
+    ax.set_yticks([])
+    ax.set_xticks([])
+    ax.invert_yaxis()
+    
+    max_val = max(lucks)
+    ax.set_xlim(0, max_val * 2.0) 
+
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    col_team_x = -max_val * 0.8    
+    col_index_x = -max_val * 0.1   
+    
+    for i, (player, luck) in enumerate(zip(players, lucks)):
+        ax.text(col_team_x, i, player, va='center', ha='left', fontsize=9)
+        ax.text(col_index_x, i, f"{luck:.1f}", va='center', ha='right', fontfamily='monospace', fontsize=9)
+
+    header_y = -1.5
+    ax.text(col_team_x, header_y, 'Player', weight='bold', fontsize=10, ha='left')
+    ax.text(col_index_x, header_y, 'Luck index', weight='bold', fontsize=10, ha='right')
+    
+    ax.plot([0, max_val], [header_y + 0.5, header_y + 0.5], color='black', linewidth=1, clip_on=False)
+    plt.tight_layout()
