@@ -260,3 +260,40 @@ def display_draw(draw : dict[str, list[str]]) -> None:
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.05, wspace=0.3, hspace=0.4)
     plt.suptitle("OFFICIAL DRAW - WORLD CUP", color='white', fontsize=22, fontweight='bold', y=0.98)
+
+def bat_luck_index(luckIndex):
+    data = {}
+    for team in luckIndex:
+        data[team] = 100*luckIndex[team][1]
+    
+    sorted_data = dict(sorted(data.items(), key=lambda item: item[1], reverse=True))
+    teams = list(sorted_data.keys())
+    lucks = list(sorted_data.values())
+
+    fig, ax = plt.subplots(figsize=(7, len(teams) * 0.25 + 1))
+    
+    ax.barh(range(len(teams)), lucks, color='black', height=0.7)
+    
+    ax.set_yticks([])
+    ax.set_xticks([])
+    ax.invert_yaxis()
+    
+    max_val = max(lucks)
+    ax.set_xlim(0, max_val * 2.0) 
+
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    col_team_x = -max_val * 0.8    
+    col_index_x = -max_val * 0.1   
+    
+    for i, (team, luck) in enumerate(zip(teams, lucks)):
+        ax.text(col_team_x, i, team, va='center', ha='left', fontsize=9)
+        ax.text(col_index_x, i, f"{luck:.1f}", va='center', ha='right', fontfamily='monospace', fontsize=9)
+
+    header_y = -1.5
+    ax.text(col_team_x, header_y, 'Team', weight='bold', fontsize=10, ha='left')
+    ax.text(col_index_x, header_y, 'Luck index', weight='bold', fontsize=10, ha='right')
+    
+    ax.plot([0, max_val], [header_y + 0.5, header_y + 0.5], color='black', linewidth=1, clip_on=False)
+    plt.tight_layout()
