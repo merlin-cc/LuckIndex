@@ -10,7 +10,7 @@ import base64
 
 
 ##TENNIS
-data_tennis = pd.read_csv('tennisATPRanking.csv')
+data_tennis = pd.read_csv('tennis_rankings.csv')
 list_players = total_players_list(data_tennis)
 players_name = get_players_name(data_tennis)
 index_players = total_players_index(list_players)
