@@ -18,4 +18,5 @@ official_draw = get_official_draw_2026()
 luckIndex_off = luck_index_foot(list_teams, distributions, official_draw)
 
 display_random_foot(distributions, luckIndex_off, 7, n_sim)
+
 plt.show()
