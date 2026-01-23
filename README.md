@@ -25,7 +25,7 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - Ajout des exceptions pour eviter des tirages interdits
 - foot :
 - fonctionnement du luck index
-- heritage
+- heritage ?
 - adapter les fonctions de tirage.py
 
 - si on ne choisi pas les joueurs dans le manual  OK
@@ -41,3 +41,10 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - elo != points pour le tennis
 - faire avec le vrai tirage (prendre le classement fifa de fin novemebre au moment du tirage)
 
+
+-Mettre dans l’ordre des pots (dans l’affichage des trucs) ok
+-Mettre les 4 teams dans le calcul du élo (ou pas enft, on sait pas…) 
+-Affiner l’affichage + faire les histogrammes ok
+-Utiliser classement fifa aussi (un mode fifa, un mode elo)
+-Corriger bugs tennis ok
+- Utiliser elo pour tennis ok
