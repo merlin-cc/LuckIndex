@@ -178,14 +178,13 @@ def display_luck_index(distributions, luckIndex, player, x) -> None:
 
 def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
-    rd.shuffle(players)
-    displayed_players = players[:N*N]
+    displayed_players = players[:N]
     dists = [distributions[team] for team in displayed_players]
-    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
-    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
-    x = np.linspace(xmin, xmax, 10000)
-    fig, axes = plt.subplots(N, N, figsize=(15, 7))
-    fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 100
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 100
+    x = np.linspace(xmin, xmax, 1000)
+    fig, axes = plt.subplots(int(N/4), int(N/8), figsize=(20, 24))
+    fig.suptitle(f'Luck index des {N} têtes de série (avec {num_simulations} simulations pour un tirage aléatoire)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
     for i, ax in enumerate(axes.flat):
