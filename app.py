@@ -6,11 +6,11 @@ matplotlib.use('Agg')
 import io
 import os
 import base64
-######-----------Logique python---------------######
+######-----------Logique python-----------######
 
 
-##TENNIS
-data_tennis = pd.read_csv('tennisATPRanking.csv')
+## TENNIS
+data_tennis = pd.read_csv('tennis_rankings.csv')
 list_players = total_players_list(data_tennis)
 players_name = get_players_name(data_tennis)
 index_players = total_players_index(list_players)
@@ -56,6 +56,7 @@ app = Flask (__name__)
 def welcome():
     image_draw = None
     image_a_afficher = None
+    tennis_draw_data = None
     error = None
     n = 1000
 
@@ -80,7 +81,9 @@ def welcome():
             if choix_menu == "Aléatoire" :
                 real_draw = createDraws(list_players)
                 luckIndex = luck_index(list_players, distributions, real_draw)
-                display_random(distributions, luckIndex, list_players, 3, n)
+                tennis_draw_data = real_draw
+
+                display_random(distributions, luckIndex, list_players, 32, n)
                 img = io.BytesIO()
                 plt.savefig(img, format='png', bbox_inches='tight')
                 img.seek(0) # Revenir au début du fichier virtuel
@@ -116,6 +119,8 @@ def welcome():
 
                 else:
                     manual_tirage([p1,p2,p3,p4], distributions, n)
+                    tennis_draw_data = {p1: [p2, p3, p4]}
+
                     img = io.BytesIO()
                     plt.savefig(img, format='png', bbox_inches='tight')
                     img.seek(0) # Revenir au début du fichier virtuel
@@ -165,7 +170,7 @@ def welcome():
 
 
 
-    return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab, joueurs = players_name, teams = teams_name, valeue_n = n, err = error)
+    return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab, joueurs = players_name, teams = teams_name, valeue_n = n, err = error, tennis_draw=tennis_draw_data)
 
 
 

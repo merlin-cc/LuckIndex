@@ -91,10 +91,10 @@ def get_opponents_from_draw(draw : dict[TennisPlayer, list[TennisPlayer]]) -> di
 
         #calcul des adversaires potentiels au 2e round
         opp_1_elo = p1.elo*win_probability(p1.elo, p2.elo) + p2.elo*win_probability(p2.elo, p1.elo)
-        opp_bracket_1 = TennisPlayer(p1.name + p2.name, p1.country + p2.country, 
+        opp_bracket_1 = TennisPlayer(p1.name + p2.name, 
                                      max(p1.rank, p2.rank), opp_1_elo)
         opp_2_elo = p3.elo*win_probability(p3.elo, p4.elo) + p4.elo*win_probability(p4.elo, p3.elo)
-        opp_bracket_2 = TennisPlayer(p3.name + p4.name, p3.country + p4.country, 
+        opp_bracket_2 = TennisPlayer(p3.name + p4.name, 
                                      max(p3.rank, p4.rank), opp_2_elo)
         #ajout des joueurs potentiels au 2e round
         opponents_map[p1].append(opp_bracket_2)
@@ -146,42 +146,45 @@ def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPla
     return luck_index
 
 
-def display_luck_index(distributions: dict[TennisPlayer, (float, float)], luckIndex: dict[TennisPlayer, (float,float)], player: TennisPlayer, x : list[float]) -> None:
+def display_luck_index(distributions, luckIndex, player, x) -> None:
+    """
+    Display the curve and the luck index for a tennis player
+    """
     dist = distributions[player]
-
     y = dist(x)
 
-    plt.plot(x, y, color='royalblue', linewidth=2.5)
+    color_curve = 'forestgreen'
+    color_mean = 'green'
 
-    plt.plot(X, Y, color='forestgreen', linewidth=2.5)
+    plt.plot(x, y, color=color_curve, linewidth=2.5)
 
-    plt.axvline(x=mu, color='green', linestyle=':', linewidth=2.5, alpha=0.8)
-    plt.axvline(x=val_calculee, color='black', linewidth=2.5)
+    plt.axvline(x=np.mean(dist.dataset), color=color_mean, linestyle=':', linewidth=2.5, alpha=0.8)
+    plt.axvline(x=luckIndex[player][0], color='black', linewidth=2.5)
 
-    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player]:.1f}", fontsize=11, fontweight='bold', labelpad=15)
+    plt.xlabel(f"{player.name}\nLuck index = {100*luckIndex[player][1]:.1f}", fontsize=11, fontweight='bold', labelpad=15)
 
     plt.title("")
     plt.yticks([])
-    plt.ylim(0, Y.max() * 1.1)
-    plt.xlim(x_min, x_max)
+    plt.ylim(0, y.max() * 1.1)
+    plt.xlim(x[0], x[-1])
 
     ax = plt.gca()
+    
     ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
     ax.tick_params(axis='x', labelsize=8, color='#888', labelcolor='#666')
 
-    ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='#27ae60', fontsize=8, fontweight='bold', ha='left')
-    ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='#c0392b', fontsize=8, fontweight='bold', ha='right')
+    ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='green', fontsize=8, fontweight='bold', ha='left')
+    ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='red', fontsize=8, fontweight='bold', ha='right')
 
 def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
     players = list_players
-    rd.shuffle(players)
-    displayed_players = players[:N*N]
+    displayed_players = players[:N]
     dists = [distributions[team] for team in displayed_players]
-    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
-    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
-    x = np.linspace(xmin, xmax, 10000)
-    fig, axes = plt.subplots(N, N, figsize=(15, 7))
-    fig.suptitle(f'{N*N} tirages aléatoires de joueurs (avec {num_simulations} simulations)', fontsize=16)
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 100
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 100
+    x = np.linspace(xmin, xmax, 1000)
+    fig, axes = plt.subplots(int(N/4), int(N/8), figsize=(20, 24))
+    fig.suptitle(f'Luck index des {N} têtes de série (avec {num_simulations} simulations pour un tirage aléatoire)', fontsize=16)
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
     for i, ax in enumerate(axes.flat):

@@ -189,6 +189,31 @@
                         <img src="data:image/png;base64,{{ plot_url }}" alt="Courbe Tennis">
                     </div>
                 </div>
+                {% if tennis_draw %}
+                <hr class="divider">
+                <div class="section-title" style="margin-top: 20px;">Détail du Tirage (Les Groupes)</div>
+
+                <div class="draw-grid">
+                    {% for seed, opponents in tennis_draw.items() %}
+                    <div class="group-card">
+                        <div class="player-row seed-player">
+                            <span class="rank">#{{ seed.rank }}</span>
+                            <span class="name">{{ seed.name }}</span>
+                            <span class="elo-badge">{{ seed.elo|int }} pts</span>
+                        </div>
+                        
+                        <div class="opponents-list">
+                            {% for opp in opponents %}
+                            <div class="player-row">
+                                <span class="rank text-muted">#{{ opp.rank }}</span>
+                                <span class="name">{{ opp.name }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% endif %}
             </div>
 
