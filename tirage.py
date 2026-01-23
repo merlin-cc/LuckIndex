@@ -199,8 +199,8 @@ def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlaye
     draw = {players[0] : [players[1], players[2], players[3]]}
     luckIndex = luck_index(players, distributions, draw)
     dists = [distributions[team] for team in players]
-    xmin = min([np.min(dist.dataset) for dist in dists]) - 200
-    xmax = max([np.max(dist.dataset) for dist in dists]) + 200
+    xmin = min([np.min(dist.dataset) for dist in dists]) - 100
+    xmax = max([np.max(dist.dataset) for dist in dists]) + 100
     x = np.linspace(xmin, xmax, 10000)
     fig, axes = plt.subplots(2, 2, figsize=(15, 7))
     fig.suptitle(f'tirages de joueurs (avec {num_simulations} simulations)', fontsize=16)

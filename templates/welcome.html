@@ -199,7 +199,7 @@
                         <div class="player-row seed-player">
                             <span class="rank">#{{ seed.rank }}</span>
                             <span class="name">{{ seed.name }}</span>
-                            <span class="elo-badge">{{ seed.elo|int }} pts</span>
+                            <span class="elo-badge">{{ seed.elo|int }} elo</span>
                         </div>
                         
                         <div class="opponents-list">
@@ -236,7 +236,7 @@
                             <li><strong>Les Chapeaux :</strong> Une équipe du Chapeau 4 affrontera obligatoirement des équipes plus fortes qu'elle, alors qu'une tête de série les évitera.</li>
                             <li><strong>Les Contraintes Géographiques :</strong> Le Brésil ne peut pas jouer contre l'Uruguay, l'Europe est limitée à deux équipes par groupe, etc.</li>
                         </ul>
-                        <p>
+                        <p style="color: #D22B2B">
                             Le Luck Index permet donc de voir si une équipe a un groupe difficile parce qu'elle est <strong>structurellement désavantagée par le système</strong> (Chapeau 4) ou si elle a vraiment était <strong>malchancheuse</strong> au moment du tirage (Hasard pur).
                         </p>
                     </div>
@@ -252,9 +252,16 @@
                     <div class="hypothesis-section">
                         <h4>Nous avons fait la supposition suivante (sera màj lorsque l'on aura les résultats)</h4>
                         <ul class="Hypothesis">
-                            <li><span class="Europe">Les pays européen passant les barrages UEFA sont</span> : l'Italie, la Suède, la Turquie et le Danemark.</li>
-                            <li><span class="badge-luck low">Les pays oassant les barrages FIFA sont</span> : la RDC et l'Irak.</li>
+                            <li><span class="Europe">Les pays européens passant les barrages UEFA sont</span> : l'Italie, la Suède, la Turquie et le Danemark.</li>
+                            <li><span class="badge-luck low">Les pays passant les barrages FIFA sont</span> : la RDC et l'Irak.</li>
                         </ul>
+                    </div>
+                    <div class="warning section">
+                        <h4>🛑 Attention 🛑</h4>
+                        <p style="color: #D22B2B">
+                            Le temps de calcul dépend de la puissance de votre ordinateur, cela peut prendre de quelques secondes à quelques dizaines de seconde. 
+                        </p>
+
                     </div>
                 </div>
 
