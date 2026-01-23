@@ -65,7 +65,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
         distributions[team] = gaussian_kde(opponent_strength_dist[team]) #kde
     
     print("Simulation complete.")
-    return distributions #, opponent_strength_dist (à mettre quand on stockera N simulations dans un fichier (au cas où))
+    return distributions # opponent_strength_dist (à mettre quand on stockera N simulations dans un fichier (au cas où))
 
 
 # Calcul du luck index

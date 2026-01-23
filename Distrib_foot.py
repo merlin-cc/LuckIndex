@@ -7,7 +7,7 @@ from tirage_foot import run_simulation_foot
 def generate_simulation_data():
     print("Chargement des données équipes...")
     data = pd.read_csv('football_ranking.csv')
-    teams_list_obj = teams_list(data) 
+    teams_list_obj = teams_list(data)
 
     num_simulations = 25000
     print(f"Lancement de la simulation lourde ('{num_simulations}' itérations)...")
