@@ -58,6 +58,7 @@ def welcome():
     image_a_afficher = None
     tennis_draw_data = None
     bar_foot = None
+    bar_tennis = None
     error = None
     n = 1000
 
@@ -91,6 +92,13 @@ def welcome():
                 plt.close()
 
                 image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+
+                bar_luck_index_tennis(luckIndex)
+                bar = io.BytesIO()
+                plt.savefig(bar, format='png', bbox_inches='tight')
+                bar.seek(0)
+                plt.close()
+                bar_tennis = base64.b64encode(bar.getvalue()).decode('utf8')
             
             elif choix_menu == "Manuel":
                 try:
@@ -176,7 +184,7 @@ def welcome():
 
     return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab,
                             joueurs = players_name, teams = teams_name, valeue_n = n, err = error,
-                              tennis_draw=tennis_draw_data, bar_foot_url = bar_foot)
+                              tennis_draw=tennis_draw_data, bar_foot_url = bar_foot, bar_tennis_url = bar_tennis)
 
 
 

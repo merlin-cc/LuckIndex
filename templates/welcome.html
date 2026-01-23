@@ -214,6 +214,11 @@
                     {% endfor %}
                 </div>
                 {% endif %}
+                {% if bar_tennis_url %}
+                <div class="plot-container">
+                    <img src="data:image/png;base64,{{ bar_tennis_url }}" alt="Histogramme Tennis">
+                </div>
+                {% endif %}
                 {% endif %}
             </div>
 
