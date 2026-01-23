@@ -214,6 +214,11 @@
                     {% endfor %}
                 </div>
                 {% endif %}
+                {% if bar_tennis_url %}
+                <div class="plot-container">
+                    <img src="data:image/png;base64,{{ bar_tennis_url }}" alt="Histogramme Tennis">
+                </div>
+                {% endif %}
                 {% endif %}
             </div>
 
@@ -281,7 +286,7 @@
                     </div>
                 </form>
 
-                {% if plot_url and active_tab == 'football' %}
+                {% if plot_url and bar_foot_url and active_tab == 'football' %}
                 <div class="content-card result-card">
                     <h2>Résultats Football</h2>
                     <div class="plot-container">
@@ -289,6 +294,9 @@
                     </div>
                     <div class="plot-container">
                         <img src="data:image/png;base64,{{ draw_url }}" alt="Draw Football">
+                    </div>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ bar_foot_url }}" alt="Courbe histogramme">
                     </div>
                 </div>
                 {% endif %}

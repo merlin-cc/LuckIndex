@@ -57,6 +57,8 @@ def welcome():
     image_draw = None
     image_a_afficher = None
     tennis_draw_data = None
+    bar_foot = None
+    bar_tennis = None
     error = None
     n = 1000
 
@@ -90,6 +92,13 @@ def welcome():
                 plt.close()
 
                 image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+
+                bar_luck_index_tennis(luckIndex)
+                bar = io.BytesIO()
+                plt.savefig(bar, format='png', bbox_inches='tight')
+                bar.seek(0)
+                plt.close()
+                bar_tennis = base64.b64encode(bar.getvalue()).decode('utf8')
             
             elif choix_menu == "Manuel":
                 try:
@@ -150,27 +159,32 @@ def welcome():
 
             if choix_menu_foot == "Official Draw":
                 display_official_draw_luck(distributions_foot, luckIndex, real_draw)
+                img = io.BytesIO()
+                plt.savefig(img, format='png', bbox_inches='tight')
+                img.seek(0)
+                plt.close()
+                image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
         
-            if choix_menu_foot == "Aléatoire" :
+            elif choix_menu_foot == "Aléatoire" :
                 display_random_foot(distributions_foot, luckIndex, 3, n)
-                
-            elif choix_menu_foot == "Team of interest":
-                team_name = str(request.form.get('team_of_interest'))
-                display_luck_index_foot(distributions_foot, luckIndex, team_name.strip())
+                img = io.BytesIO()
+                plt.savefig(img, format='png', bbox_inches='tight')
+                img.seek(0)
+                plt.close()
+                image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
 
-            elif choix_menu_foot == "Pot of interest":
-                pot_idx = int(request.form.get('pot_of_interest'))
-                display_pot_luck(distributions_foot, luckIndex, pots[pot_idx], f"Chapeau {pot_idx + 1}")
-
-            img = io.BytesIO()
-            plt.savefig(img, format='png', bbox_inches='tight')
+            bar_luck_index(luckIndex)
+            bar = io.BytesIO()
+            plt.savefig(bar, format='png', bbox_inches='tight')
             img.seek(0)
             plt.close()
-            image_a_afficher = base64.b64encode(img.getvalue()).decode('utf8')
+            bar_foot = base64.b64encode(bar.getvalue()).decode('utf8')
 
 
 
-    return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab, joueurs = players_name, teams = teams_name, valeue_n = n, err = error, tennis_draw=tennis_draw_data)
+    return render_template("welcome.html", plot_url=image_a_afficher, draw_url = image_draw, active_tab=active_tab,
+                            joueurs = players_name, teams = teams_name, valeue_n = n, err = error,
+                              tennis_draw=tennis_draw_data, bar_foot_url = bar_foot, bar_tennis_url = bar_tennis)
 
 
 

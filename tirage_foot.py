@@ -261,7 +261,7 @@ def display_draw(draw : dict[str, list[str]]) -> None:
     plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.05, wspace=0.3, hspace=0.4)
     plt.suptitle("OFFICIAL DRAW - WORLD CUP", color='white', fontsize=22, fontweight='bold', y=0.98)
 
-def bat_luck_index(luckIndex):
+def bar_luck_index(luckIndex):
     data = {}
     for team in luckIndex:
         data[team] = 100*luckIndex[team][1]
