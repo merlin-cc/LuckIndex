@@ -243,38 +243,6 @@
 
                         <input type="radio" id="foot_official" name="mode_jeu_foot" value="Official Draw">
                         <label for="foot_official" style="color: #d35400; font-weight: bold;">Tirage Officiel</label>
-                        
-                        <input type="radio" id="foot_team" name="mode_jeu_foot" value="Team of interest">
-                        <label for="foot_team">Équipe précise</label>
-                
-                        <input type="radio" id="foot_pot" name="mode_jeu_foot" value="Pot of interest">
-                        <label for="foot_pot">Par Chapeau</label>
-                
-                        <div id="container-team">
-                            <hr class="divider">
-                            <div class="section-title">Sélection Manuelle</div>
-                                <div class="team-card">
-                                    <label for="t{{i}}" class="team-label">Team {{i}}</label>
-                                    <select id="t{{i}}" name="team_of_interest" class="form-control">
-                                        <option value="" disabled selected>-- Choisir --</option>
-                                        {% for team in teams %}
-                                        <option value="{{ team }}">{{ team }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                        </div>
-                    
-                        <div id="container-pot-interest" class="conditional-field">
-                            <hr class="divider">
-                            <label class="player-label">Choisir le Chapeau :</label>
-                            <select name="pot_of_interest" class="form-control">
-                                <option value="0">Chapeau 1 (Têtes de série)</option>
-                                <option value="1">Chapeau 2</option>
-                                <option value="2">Chapeau 3</option>
-                                <option value="3">Chapeau 4</option>
-                            </select>
-                        </div>
-                    </div>
                 
                     <div class="action-area" style="margin-top: 20px;">
                         <button type="submit" class="btn-primary" style="background-color: #3498db;">Lancer l'analyse CDM 2026</button>
