@@ -22,7 +22,7 @@ data_foot = pd.read_csv('football_ranking.csv')
 data_foot = data_foot[data_foot['Team'].isin(teams_name)].reset_index(drop=True)
 list_teams = teams_list(data_foot)
 
-def get_distributions_foot_optimized(list_teams, n_input):
+def get_distributions_foot(list_teams, n_input):
     """
     Loading distributions for football from the csv file to imporve speed computation
     """
@@ -60,7 +60,7 @@ def welcome():
     bar_foot = None
     bar_tennis = None
     error = None
-    n = 1000
+    n = 10000
 
     active_tab = 'tennis' # to remember where the user was
 
@@ -72,7 +72,7 @@ def welcome():
         try:
             n = int(entree_nombre)
         except (ValueError, TypeError):
-            n = 1000
+            n = 10000
 
         ######-----------Logique python---------------######
 
@@ -141,7 +141,7 @@ def welcome():
             image_draw = None
             choix_menu_foot = request.form.get('mode_jeu_foot')
 
-            distributions_foot = get_distributions_foot_optimized(list_teams, n)
+            distributions_foot = get_distributions_foot(list_teams, n)
 
             if choix_menu_foot == "Official Draw":
                 real_draw = get_official_draw_2026()

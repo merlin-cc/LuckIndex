@@ -39,5 +39,5 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - essayer d'avoir un api atp
 - version anglais
 - elo != points pour le tennis
-- faire avec le vrai tirage (prednre le classement fifa de fin novemebre au moment du tirage)
+- faire avec le vrai tirage (prendre le classement fifa de fin novemebre au moment du tirage)
 

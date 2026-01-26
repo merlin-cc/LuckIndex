@@ -131,6 +131,26 @@
                     <li><strong>Créer votre propre pool de 4 joueurs pour voir a quels joueurs profite (ou non) un tirage donné, sélectionnez le Mode « Manuel »</strong></li>
                   </ul>
                 </div>
+                <div class="regle du tirage">
+                    <h4>
+                        Quels sont les modalités du tirage?
+                    </h4>
+                    <p>
+                        Le tableau principal de simple comprend 128 joueurs/joueuses, composé des admissions directes (basées sur le classement), des 16 qualifiés et des 8 wild-cards (invitations)
+                    </p>
+                    <p>
+                        Les 32 joueurs les mieux classés sont désignés "têtes de série" pour éviter qu'ils ne s'affrontent dès les premiers tours. Ils ne peuvent pas se rencontrer avant le 3ème tour.
+                    </p>
+                    <ul>
+                        <li>La tête de série N°1 est placée sur la ligne 1.</li>
+
+                        <li>La tête de série N°2 est placée sur la ligne 128 (tout en bas). Elles ne peuvent donc se rencontrer qu'en finale.</li>
+                            
+                        <li>Les têtes de série N°3 et N°4 sont tirées au sort pour être placées chacune dans une moitié de tableau différente</li>
+
+                        <li>Les autres têtes de série (5 à 32) sont tirées au sort pour remplir des sections spécifiques afin d'équilibrer le tableau. Tous les autres joueurs (non têtes de série, qualifiés, wild-cards) sont placés de manière <strong>totalement aléatoire</strong> </li>
+                    </ul>
+                </div>
             </div>
                 </div>
 
@@ -141,7 +161,7 @@
                     <div class="settings-grid">
                         <div class="form-group">
                             <label for="nb_sim">Nombre de simulations</label>
-                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(1000) }}" min="10" class="form-control">
+                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(10000) }}" min="1000" class="form-control">
                         </div>
                     </div>
                     <div class = "mode-selector">

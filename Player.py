@@ -16,7 +16,7 @@ def players_list(data : pd.DataFrame, min_rank : int, max_rank : int) -> list[Te
     assert min_rank>0, "the minimal rank must be >= 1"
     res = []
     for rank in range(min_rank, max_rank + 1):
-        res.append(TennisPlayer(data.loc[rank-1]['Player'], data.loc[rank-1]['Rank'], data.loc[rank-1]['cElo']))
+        res.append(TennisPlayer(data.loc[rank-1]['Player'], data.loc[rank-1]['Rank'], data.loc[rank-1]['Elo']))
     return res
 
 def total_players_index(list_players : list[TennisPlayer]) -> dict[str, TennisPlayer]:
