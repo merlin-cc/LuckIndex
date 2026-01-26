@@ -98,30 +98,30 @@
 
             <div id="content-tennis" class="tab-content">
                 <div class="info-box">
-                    <h3> Qu'est-ce que le Luck Index ?</h3>
+                    <h3> Qu'est-ce que le Luck Index au tennis ?</h3>
                     <p class="definition-text">
-                    C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à des milliers de tirages aléatoires.
+                    C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à la distribution des tirages possibles.
                 <br>
                 <em>« Est-ce que ce joueur a un parcours plus facile ou plus difficile que la moyenne ? »</em>
             </p>
         
             <div class="luck-scale">
                 <div class="scale-card lucky">
-                    <div class="score">Score ~ 1</div>
-                    <div class="status">Chanceux</div>
-                    <p class="desc">Tableau "ouvert". Le joueur évite les favoris au début.</p>
+                    <div class="score"> - Score ~ 1</div>
+                    <div class="status">Chanceux - Le joueur évite les favoris au début.</div>
+                    <h1> </h1>
                 </div>
         
                 <div class="scale-card normal">
-                    <div class="score">Score ~ 0.5</div>
-                    <div class="status">Normal</div>
-                    <p class="desc">Tableau standard, conforme à son classement.</p>
+                    <div class="score"> - Score ~ 0.5</div>
+                    <div class="status">Chance moyenne - Tableau standard, conforme à son classement </div>
+                    <h1> </h1>
                 </div>
         
                 <div class="scale-card unlucky">
-                    <div class="score">Score ~ 0</div>
-                    <div class="status">Malchanceux</div>
-                    <p class="desc">"Groupe de la mort". Affronte des très forts d'entrée.</p>
+                    <div class="score"> - Score ~ 0</div>
+                    <div class="status">Malchanceux - "Groupe de la mort". Affronte des adversaires très forts d'entrée.</div>
+                    <h1> </h1>
                 </div>
                 <div class="info about the website">
                   <p class="desc"><strong>Nous vous proposons de calculer le luck index de joueur de tennis au tournoi Roland Garros, leur niveau étant évalué par le classement ATP.</strong></p>
@@ -259,6 +259,9 @@
                         </p>
                         <ul class="bias-list">
                             <li><strong>Les Chapeaux :</strong> Une équipe du Chapeau 4 affrontera obligatoirement des équipes plus fortes qu'elle, alors qu'une tête de série les évitera.</li>
+                            <div class="plot-container">
+                                <img src="{{ url_for('static', filename='Pots.jpg') }}" alt="pots">
+                            </div>
                             <li><strong>Les Contraintes Géographiques :</strong> Le Brésil ne peut pas jouer contre l'Uruguay, l'Europe est limitée à deux équipes par groupe, etc.</li>
                         </ul>
                         <p style="color: #D22B2B">
@@ -294,7 +297,7 @@
                     <input type="hidden" name="sport" value="football">
                 
                     <div class="mode-selector">
-                        <label>Mode d'affichage :</label><br>
+                        <label>Mode de tirage :</label><br>
                         <input type="radio" id="foot_aleatoire" name="mode_jeu_foot" value="Aléatoire" checked>
                         <label for="foot_aleatoire">Aléatoire</label>
 
