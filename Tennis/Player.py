@@ -1,6 +1,12 @@
 import pandas as pd
 import numpy as np
 
+### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
+###                                                 Defining the structure of the object 'TennisPlayer' and several functions to get the list of players                                            ###
+#######################################################################################################################################################################################################
+
+
+
 class TennisPlayer():
     def __init__(self, name : str, rank : int , elo : int ):
         self.name = name
@@ -19,6 +25,7 @@ def players_list(data : pd.DataFrame, min_rank : int, max_rank : int) -> list[Te
         res.append(TennisPlayer(data.loc[rank-1]['Player'], data.loc[rank-1]['Rank'], data.loc[rank-1]['Elo']))
     return res
 
+
 def total_players_index(list_players : list[TennisPlayer]) -> dict[str, TennisPlayer]:
     """
     Create a dictionnary that associate each player name to the TennisPlayer
@@ -30,6 +37,7 @@ def total_players_index(list_players : list[TennisPlayer]) -> dict[str, TennisPl
 
     return res
 
+
 def get_players_name(data : pd.DataFrame) -> list[str]:
     """
     Returns a list with the names of all the players
@@ -39,6 +47,7 @@ def get_players_name(data : pd.DataFrame) -> list[str]:
     for player in players_list:
         list_name.append(player.name)
     return list_name
+
 
 def total_players_list(data : pd.DataFrame) -> list[TennisPlayer]:
     """
@@ -55,7 +64,7 @@ def total_players_list(data : pd.DataFrame) -> list[TennisPlayer]:
     return total_players
 
 
-##### Errors #####
+### ------ Errors ------ ###
 class SamePlayersError(Exception):
     def __init__(self):
         super().__init__()

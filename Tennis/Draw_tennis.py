@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import gaussian_kde
 
+### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
+###                               Creating a valid draw respecting the Roland Garros tournament rules and computing and ploting the luck index for tennis player                                    ###
+#######################################################################################################################################################################################################
+
 
 """
 Here we create random draws that are allowed by Roland Garros rules
@@ -39,7 +43,6 @@ Seeds #9 to #32 are then randomly placed in the remaining protected spots.
 All other players (the 96 unseeded players, qualifiers, and wild cards) are drawn completely randomly to fill the empty slots.
 """
 
-#Create the draws
 
 def createDraws(list_players: list[TennisPlayer]) -> dict[TennisPlayer, list[TennisPlayer]]:
     """
@@ -65,9 +68,7 @@ def createDraws(list_players: list[TennisPlayer]) -> dict[TennisPlayer, list[Ten
     return draw
 
 
-# Construction of the density of probability using the LLN
-
-def win_probability(elo1 : int , elo2: int ) -> float:
+def win_probability(elo1: int , elo2: int ) -> float:
     """
     Calcule la probabilité que le joueur 1 gagne contre le joueur 2
     en se basant sur la formule ELO.
@@ -75,7 +76,7 @@ def win_probability(elo1 : int , elo2: int ) -> float:
     return 1 / (1 + 10**((elo2 - elo1) / 400)) #calcul proposé par le systeme elo
 
 
-def get_opponents_from_draw(draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, list[TennisPlayer]]:
+def get_opponents_from_draw(draw: dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, list[TennisPlayer]]:
     """From a bracket (ordered list of 128 players), create a map of player -> opponent."""
     opponents_map = {}
     for seed in draw:
@@ -83,20 +84,20 @@ def get_opponents_from_draw(draw : dict[TennisPlayer, list[TennisPlayer]]) -> di
         p2 = draw[seed][0]
         p3 = draw[seed][1]
         p4 = draw[seed][2]
-        #chaque joueur affronte son adversaire direct 
+        #each player is paired with its direct opponent
         opponents_map[p1] = [p2]
         opponents_map[p2] = [p1]
         opponents_map[p3] = [p4]
         opponents_map[p4] = [p3]
 
-        #calcul des adversaires potentiels au 2e round
+        #computing the elo of the potential opponent of the second match
         opp_1_elo = p1.elo*win_probability(p1.elo, p2.elo) + p2.elo*win_probability(p2.elo, p1.elo)
         opp_bracket_1 = TennisPlayer(p1.name + p2.name, 
                                      max(p1.rank, p2.rank), opp_1_elo)
         opp_2_elo = p3.elo*win_probability(p3.elo, p4.elo) + p4.elo*win_probability(p4.elo, p3.elo)
         opp_bracket_2 = TennisPlayer(p3.name + p4.name, 
                                      max(p3.rank, p4.rank), opp_2_elo)
-        #ajout des joueurs potentiels au 2e round
+        #adding virtual player with the expected elo
         opponents_map[p1].append(opp_bracket_2)
         opponents_map[p2].append(opp_bracket_2)
         opponents_map[p3].append(opp_bracket_1)
@@ -104,8 +105,8 @@ def get_opponents_from_draw(draw : dict[TennisPlayer, list[TennisPlayer]]) -> di
 
     return opponents_map
 
-# Calcul de la loi de probabilité en utilisant le TLC
-def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> dict[TennisPlayer, (float, float)]:
+
+def run_simulation(list_players: list[TennisPlayer], num_simulations=10000) -> dict[TennisPlayer, (float, float)]:
     print(f"Running {num_simulations} simulations...")
     opponent_strength_dist = defaultdict(list)
 
@@ -131,9 +132,16 @@ def run_simulation(list_players : list[TennisPlayer], num_simulations=10000) -> 
     return distributions
 
 
-# Calcul du luck index
+### ----------------------------------------------------- This part contains useful functions to compute and plot the luck index of each player ----------------------------------------------------- ###
+###                                                                                                                                                                                                 ###
+#######################################################################################################################################################################################################
 
-def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPlayer, gaussian_kde], draw : dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, (float, float)]:
+
+def luck_index(list_players: list[TennisPlayer], distributions: dict[TennisPlayer, gaussian_kde], draw: dict[TennisPlayer, list[TennisPlayer]]) -> dict[TennisPlayer, (float, float)]:
+    """
+    Calculates the Luck Index for each player by comparing their actual draw difficulty 
+    (average opponent Elo) against their expected difficulty distribution derived from simulations.
+    """
     luck_index = {}
     opponents_map = get_opponents_from_draw(draw)
     for player in list_players:
@@ -146,9 +154,10 @@ def luck_index(list_players : list[TennisPlayer], distributions : dict[TennisPla
     return luck_index
 
 
-def display_luck_index(distributions, luckIndex, player, x) -> None:
+def display_luck_index(distributions: dict[TennisPlayer, gaussian_kde], luckIndex: dict[TennisPlayer, (float, float)], player: TennisPlayer, x: np.ndarray) -> None:
     """
-    Display the curve and the luck index for a tennis player
+    Plots the probability density function (KDE) of draw difficulty for a specific player,
+    marking the theoretical mean and the actual difficulty encountered.
     """
     dist = distributions[player]
     y = dist(x)
@@ -176,7 +185,12 @@ def display_luck_index(distributions, luckIndex, player, x) -> None:
     ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='green', fontsize=8, fontweight='bold', ha='left')
     ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='red', fontsize=8, fontweight='bold', ha='right')
 
-def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex : dict[TennisPlayer, float], list_players : list[TennisPlayer], N : int, num_simulations : int) -> None:
+
+def display_random(distributions: dict[TennisPlayer, (float, float)], luckIndex: dict[TennisPlayer, float], list_players: list[TennisPlayer], N: int, num_simulations: int) -> None:
+    """
+    Generates a grid of Luck Index plots for the top N seeded players to visualize 
+    the outcomes of a random draw simulation.
+    """
     players = list_players
     displayed_players = players[:N]
     dists = [distributions[team] for team in displayed_players]
@@ -195,7 +209,12 @@ def display_random(distributions : dict[TennisPlayer, (float, float)], luckIndex
             ax.set_yticks([])
             display_luck_index(distributions, luckIndex, player, x)
 
-def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlayer, (float, float)], num_simulations : int) -> None:
+
+def manual_tirage(players: list[TennisPlayer], distributions: dict[TennisPlayer, (float, float)], num_simulations: int) -> None:
+    """
+    Simulates and visualizes the Luck Index for a specific scenario where 4 players 
+    are manually selected by the user.
+    """
     draw = {players[0] : [players[1], players[2], players[3]]}
     luckIndex = luck_index(players, distributions, draw)
     dists = [distributions[team] for team in players]
@@ -212,7 +231,12 @@ def manual_tirage(players : list[TennisPlayer], distributions : dict[TennisPlaye
         ax.set_yticks([])
         display_luck_index(distributions, luckIndex, player, x)
 
-def bar_luck_index_tennis(luckIndex):
+
+def bar_luck_index_tennis(luckIndex: dict[TennisPlayer, tuple[float, float]]) -> None:
+    """
+    Creates and displays a ranked horizontal bar chart comparing the Luck Index of all players, 
+    sorted from the luckiest (highest index) to the unluckiest.
+    """
     data = {}
     for player in luckIndex:
         data[player.name] = 100*luckIndex[player][1]

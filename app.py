@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from Tennis.tirage import *
+from Tennis.Draw_tennis import *
 from Football.Draw_foot import *
 from Football.Draw_2026_WC import all_teams
 from Football.Distribution_football import get_distributions_foot

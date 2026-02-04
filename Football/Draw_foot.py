@@ -270,7 +270,8 @@ def display_draw(draw : dict[str, list[str]]) -> None:
 
 def bar_luck_index(luckIndex : dict[str, (float,float)]) -> None:
     """
-    Ploting a chart of bars to better observe which country was the luckier (resp the unluckier)
+    Creates and displays a ranked horizontal bar chart comparing the Luck Index of all teams, 
+    sorted from the luckiest (highest index) to the unluckiest.
     """
     data = {}
     for team in luckIndex:
