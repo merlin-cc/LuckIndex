@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 from Football.Team import *
-from Football.draw_2026_WC import *
+from Football.Draw_2026_WC import *
+import math
 
-
-###---------Objectif du code---------###
-### Faire tourner de nombreuses simulations de sorte a créer le luck index ###
-
+### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
+###                                                                      Run extensive simulations to compute the Luck Index                                                                        ###
+#######################################################################################################################################################################################################
 
 
 def get_teams_name(data : pd.DataFrame) -> list[str]:
@@ -62,13 +62,15 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 
     distributions = {}
     for team in opponent_strength_dist:
-        distributions[team] = gaussian_kde(opponent_strength_dist[team]) #kde
+        distributions[team] = gaussian_kde(opponent_strength_dist[team]) #kde object
     
     print("Simulation complete.")
-    return distributions # opponent_strength_dist (à mettre quand on stockera N simulations dans un fichier (au cas où))
+    return distributions # opponent_strength_dist 
 
 
-# Calcul du luck index
+### ----------------------------------------------------- This part contains useful functions to compute and plot the luck index of each team ----------------------------------------------------- ###
+###                                                                                                                                                                                                 ###
+#######################################################################################################################################################################################################
 
 def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gaussian_kde], draw: dict[str, list[str]]) -> dict[str, (float,float)]:
     """
@@ -120,6 +122,7 @@ def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex:
     ax.text(0.02, 0.03, "← Easier", transform=ax.transAxes, color='#27ae60', fontsize=8, fontweight='bold', ha='left')
     ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='#c0392b', fontsize=8, fontweight='bold', ha='right')
 
+
 def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, (float,float)], N : int, num_simulations : int) -> None:
     """
     Selects N*N random teams and displays their Luck Index plots in a grid layout 
@@ -146,6 +149,9 @@ def display_random_foot(distributions : dict[str, (float, float)], luckIndex : d
 
 
 def display_official_draw_luck(distributions: dict[str, gaussian_kde], luckIndex: dict[str, tuple[float, float]], draw: dict[str, list[str]]) -> None:
+    """
+    Self explanatory, it displays the luck index for the official 2026 WC draw
+    """
     all_teams_in_draw = [team for group in draw.values() for team in group]
     relevant_dists = [distributions[t] for t in all_teams_in_draw if t in distributions]
     
@@ -157,7 +163,7 @@ def display_official_draw_luck(distributions: dict[str, gaussian_kde], luckIndex
     x = np.linspace(xmin, xmax, 1000)
 
     fig, axes = plt.subplots(12, 4, figsize=(24, 40))
-    fig.suptitle("Luck Index - Tirage Officiel Coupe du Monde 2026", fontsize=20, fontweight='bold', y=0.95)
+    fig.suptitle("Luck Index - Official Draw 2026 World Cup", fontsize=20, fontweight='bold', y=0.95)
     
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
@@ -180,18 +186,17 @@ def display_official_draw_luck(distributions: dict[str, gaussian_kde], luckIndex
             if team_name in distributions:
                 display_luck_index_foot(distributions, luckIndex, team_name, x)
             else:
-                ax.text(0.5, 0.5, f"{team_name}\n(Pas de données)", ha='center', va='center')
+                ax.text(0.5, 0.5, f"{team_name}\n(No data)", ha='center', va='center')
                 ax.set_xticks([])
                 ax.set_yticks([])
 
-import math
 
 def display_pot_luck(distributions, luckIndex, pot, pot_idx):
     """
     Displays a grid of Luck Index plots for all teams contained in a specific pot.
     """
     num_teams = len(pot[pot_idx])
-    # Calcul automatique de la grille (ex: 12 équipes -> 3 lignes, 4 colonnes)
+    # 12 teams -> 4 columns and 3 rows
     cols = 4
     rows = math.ceil(num_teams / cols)
     
@@ -200,12 +205,12 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
     
     plt.subplots_adjust(hspace=0.6, wspace=0.3)
     
-    # On aplatit les axes pour itérer facilement dessus
+    
     axes_flat = axes.flatten()
     
     for i, team_obj in enumerate(pot):
         ax = axes_flat[i]
-        plt.axes(ax) # Définit l'axe courant pour display_luck_index_foot
+        plt.axes(ax) 
         
         team_name = team_obj.name
         if team_name in distributions:
@@ -214,9 +219,10 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
             ax.set_title(f"{team_name} (No data)")
             ax.axis('off')
 
-    # Cacher les axes vides si le pot n'est pas un multiple de 4
+    # hiding the empty axis if num_teams is not a multiple of 4
     for j in range(i + 1, len(axes_flat)):
         axes_flat[j].axis('off')
+
 
 def display_draw(draw : dict[str, list[str]]) -> None:
     """
@@ -261,7 +267,11 @@ def display_draw(draw : dict[str, list[str]]) -> None:
     plt.subplots_adjust(left=0.05, right=0.95, top=0.92, bottom=0.05, wspace=0.3, hspace=0.4)
     plt.suptitle("OFFICIAL DRAW - WORLD CUP", color='white', fontsize=22, fontweight='bold', y=0.98)
 
-def bar_luck_index(luckIndex):
+
+def bar_luck_index(luckIndex : dict[str, (float,float)]) -> None:
+    """
+    Ploting a chart of bars to better observe which country was the luckier (resp the unluckier)
+    """
     data = {}
     for team in luckIndex:
         data[team] = 100*luckIndex[team][1]

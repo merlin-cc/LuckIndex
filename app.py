@@ -1,16 +1,17 @@
 from flask import Flask, render_template, request
 from Tennis.tirage import *
-from Football.tirage_foot import *
+from Football.Draw_foot import *
+from Football.Draw_2026_WC import all_teams
+from Football.Distribution_football import get_distributions_foot
 import matplotlib
 matplotlib.use('Agg')
 import io
-import os
 import base64
 ######-----------Logique python-----------######
 
 
 ## TENNIS
-data_tennis = pd.read_csv('tennis_rankings.csv')
+data_tennis = pd.read_csv('Tennis/tennis_rankings.csv')
 list_players = total_players_list(data_tennis)
 players_name = get_players_name(data_tennis)
 index_players = total_players_index(list_players)
@@ -18,34 +19,10 @@ players_name.sort()
 
 ## FOOTBALL
 teams_name = [team.name for team in all_teams]
-data_foot = pd.read_csv('football_ranking.csv')
+data_foot = pd.read_csv('Football/football_ranking.csv')
 data_foot = data_foot[data_foot['Team'].isin(teams_name)].reset_index(drop=True)
 list_teams = teams_list(data_foot)
 
-def get_distributions_foot(list_teams, n_input):
-    """
-    Loading distributions for football from the csv file to imporve speed computation
-    """
-    csv_path = 'simulations_distrib_foot.csv'
-    
-    if os.path.exists(csv_path):
-        print("Chargement des simulations depuis le CSV (rapide)...")
-        try:
-            df = pd.read_csv(csv_path)
-            distributions = {}
-
-            for team_name in df.columns:
-                distributions[team_name] = gaussian_kde(df[team_name].values)
-            
-            print("Distributions reconstruites avec succès !")
-            return distributions
-            
-        except Exception as e:
-            print(f"Erreur lors de la lecture du CSV : {e}")
-            print("Retour au calcul manuel...")
-
-    print(f"Calcul en direct ({n_input} simulations)...")
-    return run_simulation_foot(list_teams, n_input)
 
 
 ######-----------Définition de l'app---------------######
@@ -186,6 +163,10 @@ def welcome():
                             joueurs = players_name, teams = teams_name, valeue_n = n, err = error,
                               tennis_draw=tennis_draw_data, bar_foot_url = bar_foot, bar_tennis_url = bar_tennis)
 
+
+# ------------------------------------------------------------
+# Execution
+# ------------------------------------------------------------
 
 
 if __name__ == "__main__":

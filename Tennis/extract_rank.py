@@ -301,8 +301,8 @@ csv_content = """Rank,Player,Age,Elo,hElo_Rank,hElo,cElo_Rank,cElo,gElo_Rank,gEl
 300,Kenta Miyoshi,21.6,1475.6,278,1446.7,374,1347.8,277,1437.8,1512.8,2025-11,635,-0.75
 """.strip()
 
-# Création du fichier
+# Building the CSV file
 with open('tennis_rankings.csv', 'w', encoding='utf-8') as f:
     f.write(csv_content)
 
-print("Fichier 'tennis_rankings.csv' créé avec succès !")
+print("File 'tennis_rankings.csv' has succesfully been created!")

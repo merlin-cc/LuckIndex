@@ -5,8 +5,11 @@ from typing import List, Dict
 import pandas as pd
 
 
-###----------Objectif du code----------###
-### Renvoie un dictionnaire {Pool X: [TEAM1, TEAM2, TEAM3, TEAM4]} ###
+
+### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
+###                                                                Building legit draw for the 2026 World Cup using a linear optimizer                                                              ###
+#######################################################################################################################################################################################################
+
 
 @dataclass
 class Team:
@@ -15,7 +18,6 @@ class Team:
 
 n = 48
 nb_groups = 12
-
 
 
 pot1 = [
@@ -88,8 +90,8 @@ pot4 = [
 
 
 
-##### ----- OFFICIAL DRAW ----- #####
-#traiter les UEFA (pas indiqués comme il faut sur le dict + calculer les histoires de adversaire possible.)
+### -------------------------------------------------------------------------------------------- OFFICIAL DRAW -------------------------------------------------------------------------------------------- ###
+
 official_draw = {
     'Poule A': ['Mexico', 'South Africa', 'South Korea', 'Winner Play-off D (CZE/DEN/IRL/MKD)'],
     'Poule B': ['Canada', 'Winner Play-off A (BIH/ITA/NIR/WAL)', 'Qatar', 'Switzerland'],
@@ -103,7 +105,15 @@ official_draw = {
     'Poule J': ['Argentina', 'Algeria', 'Austria', 'Jordan'],
     'Poule K': ['Portugal', 'Winner Play-off 1 (COD/JAM/NCL)', 'Uzbekistan', 'Colombia'],
     'Poule L': ['England', 'Croatia', 'Ghana', 'Panama']}
-#---------------------
+
+###############################################################################################################################################################################################################
+
+
+
+### ------------------------------------------------------------------------------------- Checking if a draw is legit ------------------------------------------------------------------------------------- ###
+###                                                                              According to a code from Thomas Buchholtzer                                                                                                ###
+###############################################################################################################################################################################################################
+
 pots = [pot1, pot2, pot3, pot4]
 all_teams = [team for pot in pots for team in pot]
 
@@ -112,7 +122,7 @@ argentina_idx = 4
 france_idx = 5
 england_idx = 6
 
-def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, england_idx):
+def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, england_idx) -> bool:
     """
     Check feasibility of a team-to-group assignment under draw constraints.
 
@@ -172,7 +182,11 @@ def feasibility_check(assigned, pots, spain_idx, argentina_idx, france_idx, engl
     model.solve(pulp.PULP_CBC_CMD(msg=0))
     return pulp.LpStatus[model.status] == 'Optimal'
 
+
 def single_draw(pots) -> dict[str, list[str]]:
+    """
+    Building a draw that is legit using the previous function
+    """
     assigned = [[0] * n for _ in range(nb_groups)]
     shuffled_indices = []
     for p_idx in range(len(pots)):
@@ -208,6 +222,7 @@ def single_draw(pots) -> dict[str, list[str]]:
         result_dict[group_name] = [all_teams[i].name for i in range(n) if assigned[g][i] == 1]
     return result_dict
 
+
 def get_official_draw_2026() -> dict[str, list[str]]:
     """
     Returns the official draw dictionary for WC 2026 with 
@@ -231,9 +246,11 @@ def get_official_draw_2026() -> dict[str, list[str]]:
     }
     return official_draw
 
+
 # ------------------------------------------------------------
 # Execution
 # ------------------------------------------------------------
+
 
 if __name__ == "__main__":
     pousles_dict = single_draw(pots)
