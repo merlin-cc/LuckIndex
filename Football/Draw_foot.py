@@ -16,7 +16,7 @@ import math
 #######################################################################################################################################################################################################
 
 
-def get_teams_name(data : pd.DataFrame) -> list[str]:
+def get_teams_name(data: pd.DataFrame) -> list[str]:
     """
     Extracts and returns a list containing the names of all teams from the dataframe.
     """
@@ -27,7 +27,7 @@ def get_teams_name(data : pd.DataFrame) -> list[str]:
     return list_name
 
 
-def draw_to_teams(draw : dict[str, list[str]], list_teams: list[FootTeam]) -> dict[str, list[FootTeam]]:
+def draw_to_teams(draw: dict[str, list[str]], list_teams: list[FootTeam]) -> dict[str, list[FootTeam]]:
     """
     Converts a draw dictionary (containing team names) into a dictionary mapping pots to lists of FootTeam objects.
     """
@@ -38,7 +38,7 @@ def draw_to_teams(draw : dict[str, list[str]], list_teams: list[FootTeam]) -> di
     return res
 
 
-def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> dict[str, gaussian_kde]:
+def run_simulation_foot(list_teams: list[FootTeam], num_simulations=10000) -> dict[str, gaussian_kde]:
     """
     Runs a specified number of draw simulations to generate Gaussian KDE distributions 
     of average opponent strength for each team.
@@ -72,7 +72,7 @@ def run_simulation_foot(list_teams : list[FootTeam], num_simulations=10000) -> d
 ###                                                                                                                                                                                                 ###
 #######################################################################################################################################################################################################
 
-def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gaussian_kde], draw: dict[str, list[str]]) -> dict[str, (float,float)]:
+def luck_index_foot(list_teams: list[FootTeam], distributions: dict[str, gaussian_kde], draw: dict[str, list[str]]) -> dict[str, (float,float)]:
     """
     Calculates the Luck Index for each team by comparing their actual draw difficulty 
     (average opponent Elo) against the simulated probability distributions.
@@ -93,7 +93,7 @@ def luck_index_foot(list_teams : list[FootTeam], distributions : dict[str, gauss
     return luck_index
 
 
-def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, (float,float)], team: str, x : list[float]) -> None:
+def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, (float,float)], team: str, x: list[float]) -> None:
     """
     Plots the opponent strength distribution for a specific team, highlighting the 
     theoretical mean difficulty and the actual draw difficulty (Luck Index).
@@ -123,7 +123,7 @@ def display_luck_index_foot(distributions: dict[str, (float, float)], luckIndex:
     ax.text(0.98, 0.03, "Harder →", transform=ax.transAxes, color='#c0392b', fontsize=8, fontweight='bold', ha='right')
 
 
-def display_random_foot(distributions : dict[str, (float, float)], luckIndex : dict[str, (float,float)], N : int, num_simulations : int) -> None:
+def display_random_foot(distributions: dict[str, (float, float)], luckIndex: dict[str, (float,float)], N: int, num_simulations: int) -> None:
     """
     Selects N*N random teams and displays their Luck Index plots in a grid layout 
     to provide a quick overview of different outcomes.
@@ -224,7 +224,7 @@ def display_pot_luck(distributions, luckIndex, pot, pot_idx):
         axes_flat[j].axis('off')
 
 
-def display_draw(draw : dict[str, list[str]]) -> None:
+def display_draw(draw: dict[str, list[str]]) -> None:
     """
     Visualizes the official World Cup draw results in a stylized grid format, 
     displaying groups and their respective teams.
@@ -268,7 +268,7 @@ def display_draw(draw : dict[str, list[str]]) -> None:
     plt.suptitle("OFFICIAL DRAW - WORLD CUP", color='white', fontsize=22, fontweight='bold', y=0.98)
 
 
-def bar_luck_index(luckIndex : dict[str, (float,float)]) -> None:
+def bar_luck_index(luckIndex: dict[str, (float,float)]) -> None:
     """
     Creates and displays a ranked horizontal bar chart comparing the Luck Index of all teams, 
     sorted from the luckiest (highest index) to the unluckiest.

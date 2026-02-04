@@ -53,7 +53,7 @@ def generate_simulation_data(input_csv: str = 'Football/football_ranking.csv',
 
 
 
-def get_distributions_foot(list_teams: list[FootTeam], n_input : int) -> dict[str, gaussian_kde]:
+def get_distributions_foot(list_teams: list[FootTeam], n_input: int) -> dict[str, gaussian_kde]:
     """
     Loading distributions for football from the csv file to imporve speed computation
     """
