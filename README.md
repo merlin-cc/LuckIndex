@@ -13,3 +13,38 @@ Construire la distribution de proba de la force de l'adversaire n'est pas toujou
 - Simulation pour avoir la distribtion de probas et la force selon les tirages
 - Calcul du luck index pour un tirage donné. (fictif ou réel)
 - Pour compléter le tirage (24 autres joueurs), on cree un joueur "qualilfié" dont la force est la moyenne de la force des joueurs rank 105 à 208.
+- Passer de pyscript à Flask.
+- Présenter les courbes.
+- Permettre de creer une poule.
+- Permettre à l'utilisateur de choisir un nom parmi une liste défilante.
+- Faire une analyse sur le site pour que des novices puissent comprendre les résultats.
+
+- Regle Tournoi Roland Garros
+- Display le classement ATP utilisé
+- regle de Roland Garros
+- Ajout des exceptions pour eviter des tirages interdits
+- foot :
+- fonctionnement du luck index
+- heritage ?
+- adapter les fonctions de tirage.py
+
+- si on ne choisi pas les joueurs dans le manual  OK
+
+
+- ajouter les signatures des fonctions
+- plot le tirage ok (manque le tennis)
+- mettre uniquement les pays particpant a la cdm dans les options lors de 'choisir l'equipe' OK
+- enregister les distributions de foot et juste les exploiter, les faire en live est bcp trop long
+- pour le tirage officiel : #traiter les UEFA (pas indiqués comme il faut sur le dict + calculer les histoires de adversaire possible.) [dans draw_2026_WC]
+- essayer d'avoir un api atp
+- version anglais
+- elo != points pour le tennis
+- faire avec le vrai tirage (prendre le classement fifa de fin novemebre au moment du tirage)
+
+
+-Mettre dans l’ordre des pots (dans l’affichage des trucs) ok
+-Mettre les 4 teams dans le calcul du élo (ou pas enft, on sait pas…) 
+-Affiner l’affichage + faire les histogrammes ok
+-Utiliser classement fifa aussi (un mode fifa, un mode elo)
+-Corriger bugs tennis ok
+- Utiliser elo pour tennis ok

@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='welcome.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Luck Index - Tennis & Football Analytics</title>
+
+    <style>
+        /* LOGIQUE D'AFFICHAGE EXISTANTE (TENNIS) */
+        #container-joueurs {
+            display: none;
+        }
+        #choix_manuel:checked ~ #container-joueurs {
+            display: block;
+        }
+
+        #container-team {
+            display: none;
+        }
+        #foot_team:checked ~ #container-team {
+            display: block;
+        }
+
+        /* On cache les boutons radio qui servent de commutateurs d'onglets */
+        .tab-switch {
+            display: none;
+        }
+
+        /* Par défaut, on cache le contenu des onglets */
+        .tab-content {
+            display: none;
+        }
+
+        /* Affichage du contenu en fonction de l'onglet coché */
+        #tab-tennis:checked ~ #content-tennis,
+        #tab-football:checked ~ #content-football {
+            display: block;
+        }
+
+
+        /* Style de la barre d'onglets */
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-label {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            border-bottom: none;
+            margin-bottom: -2px; /* Pour couvrir la bordure du bas */
+        }
+
+        /* État actif de l'onglet Tennis */
+        #tab-tennis:checked ~ .tabs-header label[for="tab-tennis"] {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        /* État actif de l'onglet Football */
+        #tab-football:checked ~ .tabs-header label[for="tab-football"] {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+    </style>
+  </head>
+  <body>
+    
+    <div class="main-wrapper">
+        
+        <header class="site-header">
+            <h1>Le Luck Index</h1>
+            <p class="subtitle">Analyse de la chance au tirage au sort</p>
+        </header>
+
+        <div class="content-card">
+            
+            <input type="radio" name="sport_toggle" id="tab-tennis" class="tab-switch" {{ 'checked' if active_tab == 'tennis' }}>
+            <input type="radio" name="sport_toggle" id="tab-football" class="tab-switch" {{ 'checked' if active_tab == 'football' }}>
+
+            <div class="tabs-header">
+                <label for="tab-tennis" class="tab-label">Tennis</label>
+                <label for="tab-football" class="tab-label">Football</label>
+            </div>
+
+            <div id="content-tennis" class="tab-content">
+                <div class="info-box">
+                    <h3> Qu'est-ce que le Luck Index au tennis ?</h3>
+                    <p class="definition-text">
+                    C'est une note qui mesure la difficulté du tableau d'un joueur par rapport à la distribution des tirages possibles.
+                <br>
+                <em>« Est-ce que ce joueur a un parcours plus facile ou plus difficile que la moyenne ? »</em>
+            </p>
+        
+            <div class="luck-scale">
+                <div class="scale-card lucky">
+                    <div class="score"> - Score ~ 1</div>
+                    <div class="status">Chanceux - Le joueur évite les favoris au début.</div>
+                    <h1> </h1>
+                </div>
+        
+                <div class="scale-card normal">
+                    <div class="score"> - Score ~ 0.5</div>
+                    <div class="status">Chance moyenne - Tableau standard, conforme à son classement </div>
+                    <h1> </h1>
+                </div>
+        
+                <div class="scale-card unlucky">
+                    <div class="score"> - Score ~ 0</div>
+                    <div class="status">Malchanceux - "Groupe de la mort". Affronte des adversaires très forts d'entrée.</div>
+                    <h1> </h1>
+                </div>
+                <div class="info about the website">
+                  <p class="desc"><strong>Nous vous proposons de calculer le luck index de joueur de tennis au tournoi Roland Garros, leur niveau étant évalué par le classement ATP.</strong></p>
+                  <p class="desc"><strong>Vous pouvez :</strong></p>
+                  <ul class="desc">
+                    <li><strong>Générer un tirage aléatoire et afficher le luck index de 9 joueurs au hasard, sélectionnez le Mode « Aléatoire »</strong></li>
+                    <li><strong>Créer votre propre pool de 4 joueurs pour voir a quels joueurs profite (ou non) un tirage donné, sélectionnez le Mode « Manuel »</strong></li>
+                  </ul>
+                </div>
+                <div class="regle du tirage">
+                    <h4>
+                        Quels sont les modalités du tirage?
+                    </h4>
+                    <p>
+                        Le tableau principal de simple comprend 128 joueurs/joueuses, composé des admissions directes (basées sur le classement), des 16 qualifiés et des 8 wild-cards (invitations)
+                    </p>
+                    <p>
+                        Les 32 joueurs les mieux classés sont désignés "têtes de série" pour éviter qu'ils ne s'affrontent dès les premiers tours. Ils ne peuvent pas se rencontrer avant le 3ème tour.
+                    </p>
+                    <ul>
+                        <li>La tête de série N°1 est placée sur la ligne 1.</li>
+
+                        <li>La tête de série N°2 est placée sur la ligne 128 (tout en bas). Elles ne peuvent donc se rencontrer qu'en finale.</li>
+                            
+                        <li>Les têtes de série N°3 et N°4 sont tirées au sort pour être placées chacune dans une moitié de tableau différente</li>
+
+                        <li>Les autres têtes de série (5 à 32) sont tirées au sort pour remplir des sections spécifiques afin d'équilibrer le tableau. Tous les autres joueurs (non têtes de série, qualifiés, wild-cards) sont placés de manière <strong>totalement aléatoire</strong> </li>
+                    </ul>
+                </div>
+            </div>
+                </div>
+
+                <form method="POST">
+                    <input type="hidden" name="sport" value="tennis">
+                    
+                    <div class="section-title">Paramètres</div>
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label for="nb_sim">Nombre de simulations</label>
+                            <input type="number" id="nb_sim" name="nombre_simulations" value="{{ valeur_n|default(10000) }}" min="1000" class="form-control">
+                        </div>
+                    </div>
+                    <div class = "mode-selector">
+                        <label>Mode de calcul :</label>
+                        <input type="radio" id="choix_aleatoire" name="mode_jeu" value="Aléatoire" checked>
+                        <label for="choix_aleatoire">Aléatoire</label>
+                    
+                        <input type="radio" id="choix_manuel" name="mode_jeu" value="Manuel">
+                        <label for="choix_manuel">Manuel</label>
+                
+                        <div id="container-joueurs">
+                            <hr class="divider">
+                            <div class="section-title">Sélection Manuelle</div>
+                            <div class="players-grid">
+                                {% for i in range(1, 5) %}
+                                <div class="player-card">
+                                    <label for="j{{i}}" class="player-label">Joueur {{i}}</label>
+                                    <select id="j{{i}}" name="joueur{{i}}" class="form-control">
+                                        <option value="" disabled selected>-- Choisir --</option>
+                                        {% for joueur in joueurs %}
+                                        <option value="{{ joueur }}">{{ joueur }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <button type="submit" class="btn-primary">Lancer le calcul</button>
+                    </div>
+                </form>
+                
+                {% if err and active_tab =='tennis' %}
+                <div class="content-card result-card">
+                    <h2>{{ err }}</h2>
+                </div>
+                {% endif %}
+
+                {% if plot_url and active_tab == 'tennis' %}
+                <div class="content-card result-card">
+                    <h2>Résultats Tennis</h2>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ plot_url }}" alt="Courbe Tennis">
+                    </div>
+                </div>
+                {% if tennis_draw %}
+                <hr class="divider">
+                <div class="section-title" style="margin-top: 20px;">Détail du Tirage (Les Groupes)</div>
+
+                <div class="draw-grid">
+                    {% for seed, opponents in tennis_draw.items() %}
+                    <div class="group-card">
+                        <div class="player-row seed-player">
+                            <span class="rank">#{{ seed.rank }}</span>
+                            <span class="name">{{ seed.name }}</span>
+                            <span class="elo-badge">{{ seed.elo|int }} elo</span>
+                        </div>
+                        
+                        <div class="opponents-list">
+                            {% for opp in opponents %}
+                            <div class="player-row">
+                                <span class="rank text-muted">#{{ opp.rank }}</span>
+                                <span class="name">{{ opp.name }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if bar_tennis_url %}
+                <div class="plot-container">
+                    <img src="data:image/png;base64,{{ bar_tennis_url }}" alt="Histogramme Tennis">
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <div id="content-football" class="tab-content">
+                <div class="info-box">
+                    <h3>Qu'est-ce que le Luck Index au Football ?</h3>
+                    
+                    <p class="definition-text">
+                        Le Luck Index mesure la difficulté du groupe d'une équipe, 
+                        <strong>non pas dans l'absolu, mais par rapport à ce qui était mathématiquement possible pour elle.</strong>
+                    </p>
+                
+                    <div class="explanation-section">
+                        <h4>Pourquoi c'est important ? (Le biais structurel)</h4>
+                        <p>
+                            Comparer simplement le classement des adversaires est trompeur car <strong>toutes les équipes ne jouent pas au même jeu</strong>. 
+                            Le tirage est intrinsèquement biaisé par :
+                        </p>
+                        <ul class="bias-list">
+                            <li><strong>Les Chapeaux :</strong> Une équipe du Chapeau 4 affrontera obligatoirement des équipes plus fortes qu'elle, alors qu'une tête de série les évitera.</li>
+                            <div class="plot-container">
+                                <img src="{{ url_for('static', filename='Pots.jpg') }}" alt="pots">
+                            </div>
+                            <li><strong>Les Contraintes Géographiques :</strong> Le Brésil ne peut pas jouer contre l'Uruguay, l'Europe est limitée à deux équipes par groupe, etc.</li>
+                        </ul>
+                        <p style="color: #D22B2B">
+                            Le Luck Index permet donc de voir si une équipe a un groupe difficile parce qu'elle est <strong>structurellement désavantagée par le système</strong> (Chapeau 4) ou si elle a vraiment était <strong>malchancheuse</strong> au moment du tirage (Hasard pur).
+                        </p>
+                    </div>
+                
+                    <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+                
+                    <div class="interpretation-section">
+                        <h4>Comment lire le score ?</h4>
+                        <ul class="score-list">
+                            <li><span class="badge-luck high">High Luck (~100%)</span> : L'équipe a obtenu l'un des tirages les plus faciles possibles pour son statut.</li>
+                            <li><span class="badge-luck low">Low Luck (~0%)</span> : L'équipe est tombée dans le pire scénario mathématiquement possible ("Groupe de la mort").</li>
+                        </ul>
+                    <div class="hypothesis-section">
+                        <h4>Nous avons fait la supposition suivante (sera màj lorsque l'on aura les résultats)</h4>
+                        <ul class="Hypothesis">
+                            <li><span class="Europe">Les pays européens passant les barrages UEFA sont</span> : l'Italie, la Suède, la Turquie et le Danemark.</li>
+                            <li><span class="badge-luck low">Les pays passant les barrages FIFA sont</span> : la RDC et l'Irak.</li>
+                        </ul>
+                    </div>
+                    <div class="warning section">
+                        <h4>🛑 Attention 🛑</h4>
+                        <p style="color: #D22B2B">
+                            Le temps de calcul dépend de la puissance de votre ordinateur, cela peut prendre de quelques secondes à quelques dizaines de seconde. 
+                        </p>
+
+                    </div>
+                </div>
+
+                <form method="POST">
+                    <input type="hidden" name="sport" value="football">
+                
+                    <div class="mode-selector">
+                        <label>Mode de tirage :</label><br>
+                        <input type="radio" id="foot_aleatoire" name="mode_jeu_foot" value="Aléatoire" checked>
+                        <label for="foot_aleatoire">Aléatoire</label>
+
+                        <input type="radio" id="foot_official" name="mode_jeu_foot" value="Official Draw">
+                        <label for="foot_official" style="color: #d35400; font-weight: bold;">Tirage Officiel</label>
+                
+                    <div class="action-area" style="margin-top: 20px;">
+                        <button type="submit" class="btn-primary" style="background-color: #3498db;">Lancer l'analyse CDM 2026</button>
+                    </div>
+                </form>
+
+                {% if plot_url and bar_foot_url and active_tab == 'football' %}
+                <div class="content-card result-card">
+                    <h2>Résultats Football</h2>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ plot_url }}" alt="Courbe Football">
+                    </div>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ draw_url }}" alt="Draw Football">
+                    </div>
+                    <div class="plot-container">
+                        <img src="data:image/png;base64,{{ bar_foot_url }}" alt="Courbe histogramme">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        
+        <footer class="site-footer">
+            <p>Développé par Antoine CHEDID & Merlin CONDE-CHERUBIN</p>
+        </footer>
+
+    </div>
+  </body>
+</html>
