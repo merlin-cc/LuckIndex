@@ -9,7 +9,7 @@ import io
 import base64
 
 ### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
-###                               Creating a valid draw respecting the Roland Garros tournament rules and computing and ploting the luck index for tennis player                                    ###
+###                                            Proposing a functionnal website to vizualize the luck index implemented in the floders tennis & football                                             ###
 #######################################################################################################################################################################################################
 
 
