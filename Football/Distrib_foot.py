@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
-from Team import *
-from draw_2026_WC import * 
-from tirage_foot import run_simulation_foot
+from Football.Team import *
+from Football.draw_2026_WC import * 
+from Football.tirage_foot import run_simulation_foot
 
 def generate_simulation_data():
     print("Chargement des données équipes...")

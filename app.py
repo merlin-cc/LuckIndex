@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-from tirage import *
-from tirage_foot import *
+from Tennis.tirage import *
+from Football.tirage_foot import *
 import matplotlib
 matplotlib.use('Agg')
 import io

@@ -3,7 +3,7 @@ from collections import defaultdict
 import matplotlib.ticker as ticker
 from scipy.stats import norm
 from scipy.integrate import quad
-from Player import *
+from Tennis.Player import *
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import gaussian_kde

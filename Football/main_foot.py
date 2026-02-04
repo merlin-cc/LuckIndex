@@ -1,6 +1,6 @@
-from Team import *
-from tirage_foot import *
-from draw_2026_WC import *
+from Football.Team import *
+from Football.tirage_foot import *
+from Football.draw_2026_WC import *
 
 data = pd.read_csv('football_ranking.csv')
 list_teams = teams_list(data)

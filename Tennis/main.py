@@ -1,5 +1,5 @@
-from Player import *
-from tirage import *
+from Tennis.Player import *
+from Tennis.tirage import *
 
 data = pd.read_csv('football_ranking.csv')
 

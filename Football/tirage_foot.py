@@ -7,8 +7,8 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
-from Team import *
-from draw_2026_WC import *
+from Football.Team import *
+from Football.draw_2026_WC import *
 
 
 ###---------Objectif du code---------###
