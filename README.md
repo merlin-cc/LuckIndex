@@ -1,4 +1,3 @@
-
 # LuckIndex — Web application
 
 LuckIndex is a small Flask web application to visualize and analyze a "luck index" computed for tournament draws in Tennis and Football.
