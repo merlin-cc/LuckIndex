@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 from Football.Team import *
-from Football.Draw_2026_WC import *
+from Football.draw_2026_WC import *
 import math
 
 ### ---------------------------------------------------------------------------------------- Code Objective --------------------------------------------------------------------------------------- ###
