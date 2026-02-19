@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from Football.Team import *
-from Football.Draw_2026_WC import * 
+from Football.draw_2026_WC import * 
 from Football.Draw_foot import run_simulation_foot
 from scipy.stats import gaussian_kde
 import os
